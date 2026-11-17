@@ -96,7 +96,6 @@ main{max-width:1180px;margin:0 auto;padding:22px 20px 90px}
 .mini{display:none}
 .only-s,.only-t,.only-m{display:none}/* 畫面窄、表格欄位藏起來時，改放在展開的小卡裡 */
 @media (max-width:1199px){.hide-m{display:none}.dt .only-m{display:block}}
-@media (max-width:999px){.ret span{display:none}}
 @media (max-width:899px){.hide-t{display:none}.dt .only-t{display:block}}
 table{border-collapse:collapse;width:100%;font-size:14px}
 th,td{padding:10px 7px;text-align:right;white-space:nowrap}
@@ -151,9 +150,6 @@ tr.more td{white-space:normal;text-align:left;padding:4px 20px 16px 56px}
 .rk.t1{background:#f7c948;color:#3d2c00}.rk.t2{background:#cfd6e0;color:#263042}.rk.t3{background:#e6ac7c;color:#3f2206}
 .ret{display:flex;align-items:center;justify-content:flex-end;gap:10px}
 .ret b{min-width:62px;font-size:15px}
-.ret i{display:block;height:6px;border-radius:3px;min-width:2px;background:var(--long)}
-.short .ret i{background:var(--short)}
-.ret span{width:90px;display:flex;justify-content:flex-start}
 input[type=checkbox]{width:17px;height:17px;accent-color:var(--acc);cursor:pointer;margin:0;vertical-align:middle}
 .empty{padding:46px 20px;text-align:center;color:var(--sub)}
 details.help{margin-top:14px;font-size:13px;color:var(--sub)}
@@ -211,7 +207,6 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
   .mini{display:block;font-size:12px;color:var(--faint);margin-top:3px}
   .seg{flex-wrap:wrap}
   .kpis .kpi:nth-child(n+3){display:none}
-  .ret span{display:none}
   th,td{padding:9px 8px}
   td.name{min-width:170px}
   tr.more td{padding:4px 12px 14px}
@@ -472,7 +467,6 @@ function renderTable() {
   if (!scen()) return;
   const sc = scen(), ref = sc["列"].find(r => r["方向"] === "對照");
   let rs = sideRows(st.side);
-  const max = Math.max(...rs.map(r => r["年化"]), st.side !== "空" ? ref["年化"] : 0, 1e-9);
   // 標籤篩選：選好幾個就是全部都要有；每個標籤後面的數字＝再加選它會剩幾支
   const has = (r, ts) => { const t = tagsOf(r["編號"]); return [...ts].every(x => t.includes(x)); };
   const noHit = r => { const t = tagsOf(r["編號"]); return [...st.no].some(x => t.includes(x)); };
@@ -528,7 +522,7 @@ function renderTable() {
       <td class="c"><span class="rk ${n <= 3 ? "t" + n : ""} num">${n}</span></td>
       <td class="l name"><span class="chev">▶</span>${isRef ? "" : `<span class="code">${esc(c.split("_")[0])}</span>`}${esc(r["名稱"])}${tags}
         <div class="how">${howText(r)}</div><div class="mini">放 ${r["倍數"].toFixed(2)} 倍・最大回落 ${pct(r["最大回落"])}</div>${chips || sv.length ? `<div class="tgs">${chips}${sv.length ? `<span class="tg do" title="很像的策略只留這支，點開看其他幾支">同類 ${sv.length} 支</span>` : ""}</div>` : ""}</td>
-      <td><div class="ret"><b class="num">${pct(r["年化"])}</b><span><i style="width:${Math.max(2, r["年化"] / max * 90)}px;${isRef ? "background:var(--faint)" : ""}"></i></span></div></td>
+      <td><div class="ret"><b class="num">${pct(r["年化"])}</b></div></td>
       <td class="num hide-s">${r["倍數"].toFixed(2)}</td>
       <td class="num hide-s">${pct(r["最大回落"])}</td>
       <td class="num hide-s hide-t">${r["夏普"].toFixed(2)}</td>
