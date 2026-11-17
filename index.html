@@ -94,11 +94,12 @@ main{max-width:1180px;margin:0 auto;padding:22px 20px 90px}
 /* 表格不左右捲：螢幕變窄就把次要的欄收進點開的小卡，表頭才能貼在上方導覽列下面 */
 .tablewrap{overflow:visible}
 .mini{display:none}
-@media (max-width:1199px){.hide-m{display:none}}
+.only-s,.only-t,.only-m{display:none}/* 畫面窄、表格欄位藏起來時，改放在展開的小卡裡 */
+@media (max-width:1199px){.hide-m{display:none}.dt .only-m{display:block}}
 @media (max-width:999px){.ret span{display:none}}
-@media (max-width:899px){.hide-t{display:none}}
+@media (max-width:899px){.hide-t{display:none}.dt .only-t{display:block}}
 table{border-collapse:collapse;width:100%;font-size:14px}
-th,td{padding:10px 12px;text-align:right;white-space:nowrap}
+th,td{padding:10px 7px;text-align:right;white-space:nowrap}
 th{font-size:12px;font-weight:600;color:var(--faint);background:var(--raise);border-bottom:1px solid var(--line);cursor:pointer;user-select:none;position:sticky;top:58px;z-index:5}
 th:hover{color:var(--ink)}
 th.on{color:var(--acc)}
@@ -109,7 +110,7 @@ tbody tr:last-child{border-bottom:0}
 tbody tr:hover{background:var(--raise)}
 tbody tr.sel{background:var(--acc-soft)}
 tr.ref td{color:var(--sub)}
-td.name{white-space:normal;min-width:240px;max-width:440px}
+td.name{white-space:normal;min-width:220px;max-width:440px}
 /* 每支怎麼做、標籤、展開的小卡 */
 .how{font-size:12.5px;color:var(--sub);margin-top:3px;line-height:1.5}
 .how b{font-weight:600;color:var(--ink)}
@@ -206,6 +207,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
 @media (max-width:640px){
   main{padding:16px 12px 90px}
   .hide-s{display:none}
+  .dt .only-s{display:block}
   .mini{display:block;font-size:12px;color:var(--faint);margin-top:3px}
   .seg{flex-wrap:wrap}
   .kpis .kpi:nth-child(n+3){display:none}
@@ -269,7 +271,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
       <li>這是策略參考地圖：只列<b>全部期間不放大也有賺錢</b>、而且這個條件下年化大於 0 的策略。</li>
       <li>很像的只留一支：先扣掉每支跟大盤一起漲跌的部分，只比「什麼時候空手、加碼、放空」這些決定；決定同步 60% 以上的算同一類（同類裡每一對都要到 60%）。同一個訊號只差抱法的（只空白天、空一天、空五天）也算同一類。做多、做空、雙向分開比。</li>
       <li>每類只留這個條件下一年平均賺最多的那支，其他的點名稱下面「同類還有」打開看，會列出每支在這個條件下的一年賺幾 % 和勝率。換起算年份或放大規則，留下的那支可能換人。搜尋框打同類裡任何一支的編號或名稱，會把那支單獨列出來，標「同類・○○ 代表」。</li>
-      <li>「放幾倍」是在選的期間裡重新找的；「一年平均賺本金」是照那個倍數算的一年平均報酬（複利）。「平均每筆賺」「有部位每天賺」都是不放大的；想看不放大一年賺多少，把放大規則拉到 0。</li>
+      <li>「放幾倍」是在選的期間裡重新找的；「一年平均賺本金」是照那個倍數算的一年平均報酬（複利）。「每筆賺」（平均每筆交易賺幾 %）、「每天賺」（有部位的日子平均一天賺幾 %）都是不放大的；想看不放大一年賺多少，把放大規則拉到 0。</li>
       <li>每支名稱下面那行是<b>怎麼做</b>：什麼時候進場、什麼時候出場（日盤開盤 08:45、夜盤開盤 15:00）、平均抱幾個交易日、一年大約進場幾次。會加碼的（平常抱 1 口、訊號出現多抱 1 口）講的是加碼那一口。點一下那一列可以展開看更多。</li>
       <li>標籤分兩種：藍色是<b>看什麼資料</b>決定進出（照策略名稱分），灰色是<b>怎麼做</b>（只抱白天、只抱夜盤、要做夜盤、會加碼、抱很久＝平均 20 天以上、短進短出＝平均 2 天以內、常進出＝一年進出 40 次以上、很少進出＝一年不到 2 次）。點上面的標籤可以篩選：點一下＝只看有這個標籤的（選好幾個就是全部都要有），再點一下變成紅色刪除線＝不看有這個標籤的，點第三下取消。「筆數少」是全部期間不到 20 筆，數字不太能信。</li>
       <li>倍數一律照<b>不被追繳</b>算：照實際的做法——口數固定、中途不補錢也不減碼，而且假設剛好在最高點進場——帳戶也不會跌破維持保證金；照規則的倍數做不到的，會壓低並標「壓低倍數」。維持保證金用 2026-11-10 的比例；大跌時期交所常調高保證金，實際風險會更高。</li>
@@ -430,7 +432,7 @@ $("theme").onclick = () => {
 // ---------- 排行榜 ----------
 // 跟 Windows 檔案總管一樣的排法：不分大小寫，字串裡的數字照數值大小比（S9 排在 S10 前面）
 const NATURAL = new Intl.Collator("zh-Hant", { numeric: true, sensitivity: "base" });
-const COLS = [["比較", null, "c"], ["名次", "名次", "c"], ["策略", "標籤", "l"], ["一年平均賺本金", "年化", "", "照這個倍數，一年平均賺本金的幾 %（複利）"], ["放幾倍", "倍數", "hide-s", "合約價值是帳戶錢的幾倍；12 倍＝每口只放原始保證金"], ["最大回落", "最大回落", "hide-s", "從最高點最多跌掉幾 %"], ["夏普", "夏普", "hide-s hide-t", "報酬穩不穩：平均報酬 ÷ 上下波動，越高越穩。1 以上算不錯"], ["勝率", "勝率", "hide-s", "每筆交易裡，賺錢的筆數占多少"], ["賺賠比", "賺賠比", "hide-s hide-m", "賺錢那幾筆平均賺的 ÷ 賠錢那幾筆平均賠的，大於 1 代表賺的比賠的大"], ["賺錢月份", "賺錢月份", "hide-s hide-m", "有進場的月份裡，賺錢的月份占多少"], ["最慘一年", "最慘一年", "hide-s hide-m", "照這個倍數，報酬最差的那一年"], ["有部位時間", "有部位", "hide-s hide-m"], ["平均每筆賺", "每筆賺", "hide-s hide-m", "這段期間每一筆交易平均賺幾 %（賺賠 ÷ 進場價，不放大）。會加碼的只算加碼那幾口"], ["有部位每天賺", "每天賺", "hide-s hide-m", "手上有部位的日子，平均一天賺幾 %（不放大）。跟買進持有那一列比，短線、很少出手的策略也比得公平"]];
+const COLS = [["比較", null, "c"], ["名次", "名次", "c"], ["策略", "標籤", "l"], ["一年平均賺本金", "年化", "", "照這個倍數，一年平均賺本金的幾 %（複利）"], ["放幾倍", "倍數", "hide-s", "合約價值是帳戶錢的幾倍；12 倍＝每口只放原始保證金"], ["最大回落", "最大回落", "hide-s", "從最高點最多跌掉幾 %"], ["夏普", "夏普", "hide-s hide-t", "報酬穩不穩：平均報酬 ÷ 上下波動，越高越穩。1 以上算不錯"], ["勝率", "勝率", "hide-s", "每筆交易裡，賺錢的筆數占多少"], ["賺賠比", "賺賠比", "hide-s hide-m", "賺錢那幾筆平均賺的 ÷ 賠錢那幾筆平均賠的，大於 1 代表賺的比賠的大"], ["賺錢月份", "賺錢月份", "hide-s hide-m", "有進場的月份裡，賺錢的月份占多少"], ["最慘一年", "最慘一年", "hide-s hide-m", "照這個倍數，報酬最差的那一年"], ["有部位", "有部位", "hide-s hide-m", "全部交易日裡，手上有部位的日子占多少"], ["每筆賺", "每筆賺", "hide-s hide-m", "這段期間每一筆交易平均賺幾 %（賺賠 ÷ 進場價，不放大）。會加碼的只算加碼那幾口"], ["每天賺", "每天賺", "hide-s hide-m", "手上有部位的日子，平均一天賺幾 %（不放大）。跟買進持有那一列比，短線、很少出手的策略也比得公平"]];
 function sideRows(side) {
   const rs = scen()["列"].filter(r => r["方向"] === side).sort((a, b) => b["年化"] - a["年化"]);
   rs.forEach((r, i) => { r["名次"] = i + 1; r["標籤"] = label(r); });
@@ -562,12 +564,15 @@ function notFound() {
   const side = SIDE_NAME[(DATA["類"][c] || "").replace(/\d+$/, "")] || "";
   return `${c} ${DATA["名稱"][c][0]}：這個條件下不在${SIDE_NAME[st.side]}榜上。${side && side !== SIDE_NAME[st.side] ? `它在${side}榜。` : ""}${where.length ? `起算年份選 ${where.join("、")} 才看得到。` : "這個放大規則下每個起算年份都沒賺錢。"}`;
 }
-// 點開一列看到的小卡：只放表格上沒有的（筆數、最近一次進場、同類、報表連結）
+// 點開一列看到的小卡：只放表格上沒有的（筆數、最近一次進場、同類、報表連結）；畫面窄時表格藏起來的欄位也放這裡
 function detail(r, sc) {
   const c = r["編號"], v = INFO[c];
-  const cell = (k, x) => `<div><span class="k">${k}</span><b>${x}</b></div>`;
+  const cell = (k, x, cls = "") => `<div class="${cls}"><span class="k">${k}</span><b>${x}</b></div>`;
   const sv = sims(r), nums = Object.fromEntries([...sc["列"], ...(sc["同類列"] || [])].map(x => [x["編號"], [x["年化"], x["勝率"]]]));
   return `<div class="dt">
+    ${cell("勝率", r["勝率"] == null ? "—" : pct(r["勝率"], 0), "only-s") + cell("夏普", r["夏普"].toFixed(2), "only-t") + cell("賺賠比", r["賺賠比"] == null ? "—" : r["賺賠比"].toFixed(2), "only-m") +
+      cell("賺錢月份", pct(r["賺錢月份"], 0), "only-m") + cell("最慘一年", pct(r["最慘一年"]), "only-m") + cell("有部位的日子", pct(r["有部位"], 0), "only-m") +
+      cell("平均每筆賺", r["每筆賺"] == null ? "—" : pct(r["每筆賺"], 2), "only-m") + cell("有部位每天賺", pct(r["每天賺"], 2), "only-m")}
     ${v ? cell("全部期間筆數", fmt(v["筆"]) + " 筆") + cell("最近一次進場", v["上次"]) : ""}
     ${DATA["有報表"].includes(c) ? `<div><a href="report.html#${encodeURIComponent(c)}">看這支的完整報表 →</a></div>` : ""}
     ${sv.length ? `<div class="wide"><span class="k">同類還有 ${sv.length} 支（${r["代表"] ? `榜上平常只留 ${esc(r["代表"].split("_")[0])}` : "很像所以只留上面這支"}；數字是這個條件下的）</span><div class="simlist">${sv.map(x => [x, nums[x]]).sort((p, q) => (q[1] ? q[1][0] : -9) - (p[1] ? p[1][0] : -9)).map(([x, y]) =>
