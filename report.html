@@ -78,6 +78,9 @@ h2{font-size:18px;margin:0 0 4px}
 .tag.雙向{background:rgba(124,139,255,.18);color:#7c8bff;border-color:transparent}
 .warnbox{background:var(--warn-soft);color:var(--warn);border-radius:10px;padding:9px 14px;margin-top:12px;font-weight:700}
 .notebox{background:var(--raise);border-radius:10px;padding:9px 14px;margin-top:10px;color:var(--sub);font-size:14.5px}
+.tagmore{border:1px solid var(--line);background:none;color:var(--sub);border-radius:999px;padding:2px 11px;font-size:13.5px;cursor:pointer}
+.taghelp>div+div{margin-top:10px}
+.taghelp p{margin:4px 0 0}
 .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
 .kpi label{display:block;font-size:13.5px;color:var(--sub)}
@@ -372,10 +375,19 @@ function render() {
 function head(d, p) {
   const x = BY[cur];
   $("#title").textContent = cur + "　" + x.name;
-  $("#tags").innerHTML = [`<span class="tag ${x.side}">${x.side === "多" ? "做多" : x.side === "空" ? "做空" : "雙向"}</span>`,
-    x.hold ? `<span class="tag">${x.hold}</span>` : "", x.grade ? `<span class="tag">等級 ${x.grade}</span>` : "",
-    `<span class="tag">資料 ${x.from} ～ ${x.to}</span>`, `<span class="tag">有部位的日子占 ${pct0(d.有部位)}</span>`,
-    `<span class="tag">一般一筆抱 ${median(T.map(t => t.h)) || 0} 天</span>`].join("");
+  // 每個標籤配一句說明：平常只列標籤，點後面的小三角才展開說明
+  const GRADE = { "甲": "每一段期間都贏買進持有", "乙": "全部期間和近年都贏買進持有", "丙": "全部期間贏買進持有，但近年有一段輸", "丁": "只靠躲掉 2000 或 2008 年的大跌才贏", "輸": "全部期間輸給買進持有" };
+  const HOLD = { "會加碼": "平常抱 1 口，訊號出現時多抱 1 口。", "只空白天": "日盤開盤（08:45）放空，當天夜盤開盤（15:00）補回。", "只空夜盤": "夜盤開盤（15:00）放空，隔天日盤開盤（08:45）補回。",
+    "空一天": "放空後抱 1 個交易日就補回。", "空五天": "放空後抱 5 個交易日才補回。", "訊號亮著就一直空": "訊號出現就放空，抱到訊號消失才補回。", "抱 5 天": "買進後抱 5 個交易日就賣出。" };
+  const tg = [[`<span class="tag ${x.side}">${x.side === "多" ? "做多" : x.side === "空" ? "做空" : "雙向"}</span>`,
+    x.side === "多" ? "只做多，不放空。" : x.side === "空" ? "只放空，不做多。" : "多單、空單都會做，明細表的口數欄會標出每一筆是做多還是做空。"]];
+  if (x.hold) tg.push([`<span class="tag">${x.hold}</span>`, HOLD[x.hold] || "這支的抱法。"]);
+  if (x.grade) tg.push([`<span class="tag">等級 ${x.grade}</span>`, `跟同期間的買進持有比：${GRADE[x.grade]}。等級由好到差是甲、乙、丙、丁、輸。`]);
+  tg.push([`<span class="tag">資料 ${x.from} ～ ${x.to}</span>`, "這支回測用的資料從哪一天到哪一天。"],
+    [`<span class="tag">有部位的日子占 ${pct0(d.有部位)}</span>`, "全部交易日裡，手上有部位的日子占多少，其他日子空手。"],
+    [`<span class="tag">一般一筆抱 ${median(T.map(t => t.h)) || 0} 天</span>`, "把每一筆抱的天數由小排到大，排在正中間那一筆抱幾天。"]);
+  $("#tags").innerHTML = tg.map(t => t[0]).join("") + `<button class="tagmore" id="tagMore" title="標籤說明" aria-label="標籤說明">${window.tagOpen ? "▴" : "▾"}</button>`;
+  $("#tagMore").onclick = () => { window.tagOpen = !window.tagOpen; $("#tagMore").textContent = window.tagOpen ? "▴" : "▾"; $("#tagHelp").hidden = !window.tagOpen; };
   $("#stale").innerHTML = x.to < D.資料到 ? `<div class="warnbox">⚠ 這支的資料只到 ${x.to}，沒有跟上最新一天（${D.資料到}）。</div>` : "";
   const n = [];
   if (d.來源 === "每日") n.push("這支沒有交易明細檔，每一筆是照「每天有沒有部位」切出來的：連續有部位算一筆" + (x.hold.startsWith("只空") ? "，" + x.hold + "的每天算一筆" : "") + "。");
@@ -384,8 +396,9 @@ function head(d, p) {
   if (d.對不上) n.push(`⚠ 這支的交易明細有一筆跟每天的數字差約 ${d.對不上.toLocaleString()} 點（全部加起來對得上）。差最多的那一筆，它的「中間帳面最深」可能不準。`);
   if (d.段) n.push("這支每次訊號各算一筆，筆跟筆會重疊（同時抱 2 口以上）。統計和明細一筆一筆列；追繳和斷頭在重疊的日子照當時合計的口數算。");
   if (T.some(t => t.w !== 1)) n.push("這支有時候抱超過 1 口。上面填的口數是「策略抱 1 口時你做幾口」，策略抱 2 口時金額和保證金都照 2 倍算；報酬率是每一口的。");
-  if (x.side === "雙向") n.push("這支多空都會做，明細表的口數欄會標出每一筆是做多還是做空。");
-  $("#notes").innerHTML = n.map(s => `<div class="notebox">${s}</div>`).join("");
+  // ⚠ 開頭的照樣直接顯示；其他說明跟標籤說明一起收著
+  $("#notes").innerHTML = n.filter(s => s.startsWith("⚠")).map(s => `<div class="notebox">${s}</div>`).join("") +
+    `<div class="notebox taghelp" id="tagHelp" ${window.tagOpen ? "" : "hidden"}>${tg.map(t => `<div>${t[0]}<p>${t[1]}</p></div>`).join("")}${n.filter(s => !s.startsWith("⚠")).map(s => `<div><p>${s}</p></div>`).join("")}</div>`;
   $("#asof").textContent = "行情到 " + D.資料到 + " 日盤收盤";
   $("#now").innerHTML = `現在大台 <b>${D.現價.toLocaleString()}</b> 點，${S.lots} 口${S.prod}的合約價值 <b>${wan(p.unit, 0).replace("+", "")}</b>；原始保證金 <b>${Math.round(p.init1 * S.lots).toLocaleString()}</b>、維持 <b>${Math.round(p.maint1 * S.lots).toLocaleString()}</b>`;
 }
