@@ -392,7 +392,7 @@ async function go() {
   const k = skey();
   if (!SCEN[k]) {
     $("capNote").textContent = "載入中…"; $("capNote").classList.remove("hot");
-    try { SCEN[k] = await (await fetch(fileOf(k))).json(); }
+    try { SCEN[k] = await (await fetch(fileOf(k), { cache: "no-cache" })).json(); }
     catch (e) { $("capNote").textContent = "資料下載失敗，請重新整理再試一次。"; return; }
   }
   if (k === skey()) render();
