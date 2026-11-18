@@ -242,7 +242,7 @@ table{border-collapse:collapse;width:100%}
 
   <div class="g2" id="s-year">
     <div class="card"><h2>逐年賺賠</h2><p class="h2s">每年加起來賺或賠多少，旁邊灰色是買進持有。金額一樣是「當年的漲跌幅 × 現在的合約價值」。</p><div class="chart" id="c-year"></div></div>
-    <div class="card"><h2>月份 × 年份</h2><p class="h2s">每個月賺賠（萬元）。顏色越深數字越大。</p><div style="max-height:420px;overflow:auto"><table class="heat" id="heat"></table></div></div>
+    <div class="card"><h2>月份 × 年份</h2><p class="h2s">每個月賺賠幾 %（每一口的報酬率）。顏色越深數字越大，滑鼠移上去看金額。</p><div style="max-height:420px;overflow:auto"><table class="heat" id="heat"></table></div></div>
   </div>
   <div class="gap"></div>
 
@@ -610,7 +610,7 @@ function years(d, p) {
       tip(e, y ? `<b>${y} 年</b><br>這支 ${wan(st.Y[y][0])}（占資金 ${pct(st.Y[y][0] / S.cap, 0)}）<br>買進持有 ${wan(st.Y[y][1])}` : null); });
     c.addEventListener("mouseleave", () => tip()); }
   const mx = Math.max(1, ...Object.values(M).map(Math.abs));
-  const cell = (v, k, t) => `<td class="${t || ""}" data-t="${k}：${money(v)}" style="background:rgba(${css(v >= 0 ? "--good-rgb" : "--bad-rgb")},${v ? (0.1 + 0.75 * Math.min(1, Math.abs(v) / mx)).toFixed(2) : 0})">${v ? (v / 1e4).toFixed(1) : "·"}</td>`;
+  const cell = (v, k, t) => `<td class="${t || ""}" data-t="${k}：${money(v)}" style="background:rgba(${css(v >= 0 ? "--good-rgb" : "--bad-rgb")},${v ? (0.1 + 0.75 * Math.min(1, Math.abs(v) / mx)).toFixed(2) : 0})">${v ? (v / p.unit * 100).toFixed(1) + "%" : "·"}</td>`;
   $("#heat").innerHTML = `<tr><th>年</th>${[...Array(12)].map((_, i) => `<th>${i + 1}月</th>`).join("")}<th>全年</th></tr>` +
     [...ys].reverse().map(y => `<tr><td>${y}</td>${[...Array(12)].map((_, i) => { const m = y * 100 + i + 1; return m in M ? cell(M[m], `${y} 年 ${i + 1} 月`) : "<td></td>"; }).join("")}${cell(Y[y][0], y + " 全年", "tot")}</tr>`).join("");
 }
