@@ -449,7 +449,7 @@ function stats(d, p) {
   const s = calc(T), b = baseline(d, T, d.起, d.迄), x = BY[cur];
   const dd = drawdown(d._day).min * p.unit, yrs = (d.迄 - d.起 + 1) / 245;
   $("#kpis").innerHTML = [
-    ["平均一年", col(s.tot, wan(s.tot / yrs, 2)), `${pct(s.tot / yrs / p.unit)}（買大盤不動平均一年 ${pct(sum(BH.slice(d.起, d.迄 + 1)) / yrs)}）`],
+    ["平均一年", col(s.tot, wan(s.tot / yrs, 2)), `單利年報酬率 ${pct(s.tot / yrs / p.unit)}（買大盤不動 ${pct(sum(BH.slice(d.起, d.迄 + 1)) / yrs)}）`],
     ["交易次數", s.n + " 次", `平均一年 ${(s.n / yrs).toFixed(1)} 次`],
     ["勝率", pct0(s.win), b ? `任選一天抱${b.h}：${pct0(b.win)}` : "賺 " + s.nw + "、賠 " + s.nl],
     ["平均一次", col(s.avg, wan(s.avg, 2)), pct(s.avgr) + (b ? `（任選一天 ${pct(b.avg)}）` : "")],
