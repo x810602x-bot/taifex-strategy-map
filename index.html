@@ -142,10 +142,6 @@ tr.more td{white-space:normal;text-align:left;padding:4px 20px 16px 56px}
 .tagbar button:disabled{opacity:.4;cursor:default}
 .tagbar .clr{border:0;background:none;color:var(--acc);font-weight:600}
 .code{display:inline-block;font-size:11.5px;font-weight:700;padding:1px 7px;border-radius:6px;background:var(--raise);border:1px solid var(--line);color:var(--sub);margin-right:8px;font-variant-numeric:tabular-nums}
-.tag{display:inline-block;font-size:11px;padding:0 7px;border-radius:999px;margin-left:6px;line-height:18px;vertical-align:1px;white-space:nowrap}
-.tag.hold{background:var(--short-soft);color:var(--short)}
-.tag.warn{background:var(--warn-soft);color:var(--warn)}
-.tag.ref{background:var(--raise);color:var(--sub);border:1px solid var(--line)}
 .rk{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:7px;font-weight:700;font-size:12.5px;color:var(--sub)}
 .rk.t1{background:#f7c948;color:#3d2c00}.rk.t2{background:#cfd6e0;color:#263042}.rk.t3{background:#e6ac7c;color:#3f2206}
 .ret{display:flex;align-items:center;justify-content:flex-end;gap:10px}
@@ -372,6 +368,13 @@ const grTags = v => [...(v["等級"] ? ["長期 " + GR[v["等級"]]] : []), ...(
 const GR_TIP = { "長期": "全部的錢只做這一支，整段跟同期間買進持有比：A＝每一段都贏、B＝全部和近年都贏、C＝近年有一段輸、D＝全部贏但近年全輸、E＝全部期間輸", "單日": "有部位的日子平均一天賺的，跟買進持有平均一天賺的比（短線、很少出手的看這個）：A＝每一段都贏到 1.5 倍、B＝全部和近年都贏到 1.5 倍、C＝全部贏到 1.5 倍但近年有一段沒到、D＝全部期間有贏買進持有但沒到 1.5 倍、E＝全部期間沒贏買進持有" };
 // 滑鼠移到某一列的倍數上：用最新收盤的指數算大台、小台、微台 1 口帳戶各要放多少錢
 const needTip = k => [["大台", 200], ["小台", 50], ["微台", 10]].map(([n, m]) => `${n}＝（指數 ${fmt(DATA["現價"])} × 每點 ${m} 元）÷ ${k.toFixed(2)} ≈ 帳戶放 ${fmt(Math.round(DATA["現價"] * m / k / 1e4))} 萬做 1 口`).join("&#10;") + `&#10;指數是 ${DATA["資料到"]} 日盤收盤`;
+// 跟著目前條件變的標籤（對照、到上限、壓低倍數、同類）：[字, 樣式, 說明]。一樣放名稱下面那排，排在最後；點進報表時也帶過去
+const condTags = r => { const sv = sims(r), rep = r["代表"] && r["代表"].split("_")[0]; return [
+  ...(r["編號"] === BH ? [["對照", "do", "買進持有：拿來跟每一支策略比的基準"]] : []),
+  ...(r["碰上限"] ? [["到上限", "warn", "照規則算出來的倍數超過原始保證金能開的上限，壓在上限"]] : []),
+  ...(r["壓低"] ? [["壓低倍數", "warn", "照規則的倍數，口數固定、不補錢時會被追繳，所以壓到不會被追繳的倍數"]] : []),
+  ...(rep ? [[`同類・${rep} 代表`, "do", `跟 ${rep} 很像，榜上平常只留 ${rep}，搜尋時才單獨列出`]] : []),
+  ...(sv.length ? [[`同類 ${sv.length} 支`, "do", "很像的策略只留這支，點開看其他幾支"]] : [])]; };
 const tagsOf = c => { const v = INFO[c]; return v ? [...grTags(v), ...v["看"], ...v["做"], ...(v["筆"] < 20 ? ["筆數少"] : [])] : []; };
 const days = h => h < 1 ? "不到 1 天" : (h >= 10 ? Math.round(h) : h.toFixed(1).replace(/\.0$/, "")) + " 天";
 const freq = y => y >= 1 ? `一年約 ${y >= 10 ? Math.round(y) : y.toFixed(1).replace(/\.0$/, "")} 次` : y > 0 ? `約 ${Math.round(1 / y)} 年 1 次` : "";
@@ -514,18 +517,14 @@ function renderTable() {
   });
   tbl.querySelector("tbody").innerHTML = rs.map(r => {
     const c = r["編號"], isRef = c === BH, n = r["名次"], open = st.open.has(c), v = INFO[c];
-    const tags = (isRef ? '<span class="tag ref">對照</span>' : "") +
-      (r["碰上限"] ? '<span class="tag warn" title="照規則算出來的倍數超過原始保證金能開的上限，壓在上限">到上限</span>' : "") +
-      (r["壓低"] ? '<span class="tag warn" title="照規則的倍數，口數固定、不補錢時會被追繳，所以壓到不會被追繳的倍數">壓低倍數</span>' : "") +
-      (r["代表"] ? `<span class="tag ref" title="跟 ${esc(r["代表"].split("_")[0])} 很像，榜上平常只留 ${esc(r["代表"].split("_")[0])}，搜尋時才單獨列出">同類・${esc(r["代表"].split("_")[0])} 代表</span>` : "");
     const chips = v ? grTags(v).map(t => `<span class="tg do" title="${GR_TIP[t.slice(0, 2)]}">${t}</span>`).join("") + v["看"].map(t => `<span class="tg">${t}</span>`).join("") + v["做"].map(t => `<span class="tg do">${t}</span>`).join("") +
       (v["筆"] < 20 ? `<span class="tg warn" title="全部期間只有 ${v["筆"]} 筆，數字不太能信">筆數少</span>` : "") : "";
-    const sv = sims(r);
+    const cond = condTags(r);
     return `<tr class="row ${isRef ? "ref" : ""} ${st.picked.has(c) ? "sel" : ""} ${open ? "open" : ""}" data-c="${esc(c)}">
       <td class="c"><input type="checkbox" data-c="${esc(c)}" ${st.picked.has(c) ? "checked" : ""} aria-label="加入走勢比較"></td>
       <td class="c"><span class="rk ${n <= 3 ? "t" + n : ""} num">${n}</span></td>
-      <td class="l name"><span class="chev">▶</span>${isRef ? "" : `<span class="code">${esc(c.split("_")[0])}</span>`}${esc(r["名稱"])}${tags}
-        <div class="how">${howText(r)}</div><div class="mini">放 ${r["倍數"].toFixed(2)} 倍・最大回落 ${pct(r["最大回落"])}</div>${chips || sv.length ? `<div class="tgs">${chips}${sv.length ? `<span class="tg do" title="很像的策略只留這支，點開看其他幾支">同類 ${sv.length} 支</span>` : ""}</div>` : ""}</td>
+      <td class="l name"><span class="chev">▶</span>${isRef ? "" : `<span class="code">${esc(c.split("_")[0])}</span>`}${esc(r["名稱"])}
+        <div class="how">${howText(r)}</div><div class="mini">放 ${r["倍數"].toFixed(2)} 倍・最大回落 ${pct(r["最大回落"])}</div>${chips || cond.length ? `<div class="tgs">${chips}${cond.map(([t, k, tip]) => `<span class="tg ${k}" title="${tip}">${esc(t)}</span>`).join("")}</div>` : ""}</td>
       <td><div class="ret"><b class="num">${pct(r["年化"])}</b></div></td>
       <td class="num hide-s" title="${needTip(r["倍數"])}">${r["倍數"].toFixed(2)}</td>
       <td class="num hide-s">${pct(r["最大回落"])}</td>
@@ -575,7 +574,7 @@ function detail(r, sc) {
       cell("賺錢月份", pct(r["賺錢月份"], 0), "only-m") + cell("最慘一年", pct(r["最慘一年"]), "only-m") + cell("有部位的日子", pct(r["有部位"], 0), "only-m") +
       cell("平均每筆賺", r["每筆賺"] == null ? "—" : pct(r["每筆賺"], 2), "only-m") + cell("有部位每天賺", pct(r["每天賺"], 2), "only-m")}
     ${v ? cell("全部期間筆數", fmt(v["筆"]) + " 筆") + cell("最近一次進場", v["上次"]) : ""}
-    ${DATA["有報表"].includes(c) ? `<div><a href="report.html#${encodeURIComponent(c)}">看這支的完整報表 →</a></div>` : ""}
+    ${DATA["有報表"].includes(c) ? `<div><a href="report.html?c=${encodeURIComponent(c)}&t=${encodeURIComponent(condTags(r).map(x => x[0]).join(","))}#${encodeURIComponent(c)}">看這支的完整報表 →</a></div>` : ""}
     ${sv.length ? `<div class="wide"><span class="k">同類還有 ${sv.length} 支（${r["代表"] ? `榜上平常只留 ${esc(r["代表"].split("_")[0])}` : "很像所以只留上面這支"}；數字是這個條件下的）</span><div class="simlist">${sv.map(x => [x, nums[x]]).sort((p, q) => (q[1] ? q[1][0] : -9) - (p[1] ? p[1][0] : -9)).map(([x, y]) =>
       `<div>${esc(simName(x))}<span>${y ? `一年賺 ${pct(y[0])}・勝率 ${y[1] == null ? "—" : pct(y[1], 0)}` : noRow(x)}</span></div>`).join("")}</div></div>` : ""}
   </div>`;
