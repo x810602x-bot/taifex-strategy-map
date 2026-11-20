@@ -218,7 +218,7 @@ table{border-collapse:collapse;width:100%}
     <div class="card" id="s-stat"><h2>交易統計</h2><p class="h2s" id="stat-sub"></p><table class="kv" id="stat"></table></div>
     <div>
       <div class="card" id="s-deep"><h2>中間的帳面最深（還沒出場時）</h2>
-        <p class="h2s">每一筆從進場到出場，帳面上最難看的那一刻賠多少（看盤中最不利的價格）。</p>
+        <p class="h2s" id="deep-sub"></p>
         <table class="kv" id="deep"></table>
         <div class="tools" style="margin:10px 0 0">帳面賠超過 <input type="number" id="thr" step="10000" min="0"> 元算一次</div>
       </div>
@@ -476,6 +476,7 @@ function stats(d, p) {
 function deep(d, p) {
   const a = [...T].sort((x, y) => x.deep - y.deep), thr = S.thr == null ? Math.round(S.cap * 0.1 / 10000) * 10000 : S.thr;
   $("#thr").value = thr;
+  $("#deep-sub").textContent = `${S.lots} 口${S.prod}，跟交易統計同一種算法。每一筆從進場到出場，帳面上最難看的那一刻賠多少（看每天最不利的價格：做多看最低、做空看最高）。`;
   const one = t => t ? col(t.deep, money(t.deep)) + `<small>${pct(t.m)}</small>` + when(t) + `<small>最後 ${pct(t.r)}</small>` : "—";
   const n = T.filter(t => t.deep < -thr).length;
   $("#deep").innerHTML = `<tr><td>歷史最深</td><td>${one(a[0])}</td></tr><tr><td>第二深</td><td>${one(a[1])}</td></tr>
