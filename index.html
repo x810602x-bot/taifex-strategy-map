@@ -113,10 +113,7 @@ td.name{white-space:normal;min-width:220px;max-width:440px}
 /* 每支怎麼做、標籤、展開的小卡 */
 .how{font-size:12.5px;color:var(--sub);margin-top:3px;line-height:1.5}
 .how b{font-weight:600;color:var(--ink)}
-.tgs{margin-top:4px;display:flex;flex-wrap:wrap;gap:4px}
-.tg{font-size:11px;line-height:18px;padding:0 7px;border-radius:999px;white-space:nowrap;background:var(--acc-soft);color:var(--acc)}
-.tg.do{background:var(--raise);color:var(--sub);border:1px solid var(--line);line-height:16px}
-.tg.warn{background:var(--warn-soft);color:var(--warn)}
+.name .tgs{margin-top:4px}
 tr.row{cursor:pointer}
 .chev{display:inline-block;width:14px;color:var(--faint);font-size:11px;transition:transform .15s}
 tr.open .chev{transform:rotate(90deg)}
@@ -361,21 +358,52 @@ const simName = c => { const [n, h] = DATA["名稱"][c]; return `${c.split("_")[
 // 每支怎麼做：進出場時間、抱多久、多常進場、標籤
 const INFO = DATA["資訊"];
 const TM = { "08:45": "日盤開盤", "15:00": "夜盤開盤" };
-const LOOK = ["美股", "亞太歐", "法人", "散戶熱度", "期貨籌碼", "成交量", "技術線型", "急跌波動", "日夜盤走勢", "類股個股", "基本面", "新聞事件", "日曆"];
-const DO = ["只抱白天", "只抱夜盤", "要做夜盤", "會加碼", "抱很久", "短進短出", "常進出", "很少進出", "筆數少"];
-const GR = { "甲": "A", "乙": "B", "丙": "C", "丁": "D", "輸": "E" };   // 資料裡是甲乙丙丁輸，顯示成 A～E
-const grTags = v => [...(v["等級"] ? ["長期 " + GR[v["等級"]]] : []), ...(v["單日"] ? ["單日 " + GR[v["單日"]]] : [])];
-const GR_TIP = { "長期": "全部的錢只做這一支，整段跟同期間買進持有比：A＝每一段都贏、B＝全部和近年都贏、C＝近年有一段輸、D＝全部贏但近年全輸、E＝全部期間輸", "單日": "有部位的日子平均一天賺的，跟買進持有平均一天賺的比（短線、很少出手的看這個）：A＝每一段都贏到 1.5 倍、B＝全部和近年都贏到 1.5 倍、C＝全部贏到 1.5 倍但近年有一段沒到、D＝全部期間有贏買進持有但沒到 1.5 倍、E＝全部期間沒贏買進持有" };
+// ===== 排行榜和單支報表共用的標籤 =====
+// 標籤有哪些、順序、顏色、說明，全部只寫在這個檔；算試看.py 會把它原封不動放進兩頁。
+// 要改標籤只改這裡，不要在兩頁各寫各的（兩頁只准調大小：外面包 class="tgs" 是小的，"tgs big" 是大的）。
+const TAG_GR = { "甲": "A", "乙": "B", "丙": "C", "丁": "D", "輸": "E" };   // 資料裡是甲乙丙丁輸，顯示成 A～E
+const TAG_GRADE = {
+  "長期": ["全部的錢只做這一支，整段跟同期間的買進持有比", { "A": "每一段期間都贏", "B": "全部期間和近年都贏", "C": "全部期間贏，但近年有一段輸", "D": "全部期間贏，但近年全輸（只靠早年）", "E": "全部期間輸" }, "由好到差是 A～E。"],
+  "單日": ["有部位的日子平均一天賺的，跟買進持有平均一天賺的比", { "A": "每一段都贏到 1.5 倍", "B": "全部期間和近年都贏到 1.5 倍", "C": "全部期間贏到 1.5 倍，但近年有一段沒到", "D": "全部期間有贏買進持有，但沒贏到 1.5 倍", "E": "全部期間沒贏買進持有" }, "短線、很少出手的策略看這個才公平；筆數少的話不太能信。"] };
+const TAG_LOOK = { "美股": "看美國股市的漲跌決定進出。", "亞太歐": "看亞洲、歐洲股市決定進出。", "法人": "看外資、投信、自營商的買賣決定進出。", "散戶熱度": "看散戶熱不熱（融資、當沖、權證這類）決定進出。",
+  "期貨籌碼": "看期貨的未平倉、價差決定進出。", "成交量": "看成交量大小決定進出。", "技術線型": "看均線、指標這類線型決定進出。", "急跌波動": "看有沒有急跌、波動變大決定進出。", "日夜盤走勢": "看日盤、夜盤各自的走勢決定進出。",
+  "類股個股": "看台積電、電子、金融這類個股類股決定進出。", "基本面": "看營收、景氣、利率這類數字決定進出。", "新聞事件": "看新聞、大事件決定進出。", "日曆": "看日期（週幾、月底、結算日、長假）決定進出。" };
+const TAG_DO = { "只抱白天": "日盤開盤（08:45）進場，當天夜盤開盤（15:00）出場。", "只抱夜盤": "夜盤開盤（15:00）進場，隔天日盤開盤（08:45）出場。", "要做夜盤": "有在夜盤開盤（15:00）進場或出場，要能下夜盤單。",
+  "會加碼": "訊號出現時會多抱 1 口。", "抱很久": "一筆平均抱 20 個交易日以上。", "短進短出": "一筆平均抱 2 個交易日以內。", "常進出": "一年進出 40 次以上。", "很少進出": "一年進出不到 2 次。" };
+// 等級整把尺的說明（排行榜篩選列用）
+const tagScale = g => `${TAG_GRADE[g][0]}：${Object.entries(TAG_GRADE[g][1]).map(([k, s]) => `${k}＝${s}`).join("、")}。${TAG_GRADE[g][2]}`;
+// 跟著排行榜選的條件變的標籤：字 → [字, 樣式, 說明]；不認得的字回傳 null
+const tagCond = t => t === "對照" ? [t, "do", "買進持有：拿來跟每一支策略比的基準。"]
+  : t === "到上限" ? [t, "warn", "排行榜上你選的那個條件下：照放大規則算出來的倍數，超過原始保證金能開的上限，所以壓在上限。換起算年份或放大規則，這個標籤可能就沒有。"]
+  : t === "壓低倍數" ? [t, "warn", "排行榜上你選的那個條件下：照放大規則算出來的倍數，如果口數固定、中途不補錢，歷史上會被追繳，所以把倍數壓低到不會被追繳為止；榜上的年化報酬率是照壓低後的倍數算的。換起算年份或放大規則，這個標籤可能就沒有。"]
+  : /^同類・[A-Za-z0-9]+ 代表$/.test(t) ? [t, "do", `這支跟 ${t.slice(3, -3)} 很像，排行榜上平常只留 ${t.slice(3, -3)}，搜尋時才會單獨列出這支。`]
+  : /^同類 [0-9]+ 支$/.test(t) ? [t, "do", `還有 ${t.match(/[0-9]+/)[0]} 支跟它很像的策略，排行榜上只留那個條件下年化報酬率最高的這一支；其他幾支在排行榜點開這一列就看得到。`] : null;
+// 一支策略的全部標籤，照固定順序：長期、單日、看什麼資料、怎麼做、筆數少、跟著條件變的。每個是 [字, 樣式, 說明]
+// v＝{等級, 單日, 看, 做, 筆數少}；cond＝跟著條件變的那幾個字
+function tagList(v, cond = []) {
+  const gr = g => { const x = TAG_GR[v[g === "長期" ? "等級" : "單日"]]; return x ? [[`${g} ${x}`, "do", `${TAG_GRADE[g][0]}：${TAG_GRADE[g][1][x]}。${TAG_GRADE[g][2]}`]] : []; };
+  return [...gr("長期"), ...gr("單日"), ...(v["看"] || []).map(t => [t, "", TAG_LOOK[t]]), ...(v["做"] || []).map(t => [t, "do", TAG_DO[t]]),
+    ...(v["筆數少"] ? [["筆數少", "warn", "全部期間不到 20 筆，數字不太能信。"]] : []), ...cond.map(tagCond).filter(Boolean)];
+}
+const tagHtml = list => list.map(([t, k, tip]) => `<span class="tg ${k}" title="${tip}">${t}</span>`).join("");
+document.head.insertAdjacentHTML("beforeend", `<style>
+.tgs{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.tg{display:inline-block;font-size:11px;line-height:18px;padding:0 7px;border-radius:999px;white-space:nowrap;border:1px solid transparent;background:var(--acc-soft);color:var(--acc)}
+.tg.do{background:var(--raise);color:var(--sub);border-color:var(--line)}
+.tg.warn{background:var(--warn-soft);color:var(--warn)}
+.big .tg{font-size:13.5px;line-height:24px;padding:0 11px}
+.tgs.big{gap:8px}
+</style>`);
+
+const LOOK = Object.keys(TAG_LOOK), DO = [...Object.keys(TAG_DO), "筆數少"];   // 篩選列的順序
+const tagV = c => { const v = INFO[c]; return v ? { ...v, "筆數少": v["筆"] < 20 } : {}; };
 // 滑鼠移到某一列的倍數上：用最新收盤的指數算大台、小台、微台 1 口帳戶各要放多少錢
 const needTip = k => [["大台", 200], ["小台", 50], ["微台", 10]].map(([n, m]) => `${n}＝（指數 ${fmt(DATA["現價"])} × 每點 ${m} 元）÷ ${k.toFixed(2)} ≈ 帳戶放 ${fmt(Math.round(DATA["現價"] * m / k / 1e4))} 萬做 1 口`).join("&#10;") + `&#10;指數是 ${DATA["資料到"]} 日盤收盤`;
-// 跟著目前條件變的標籤（對照、到上限、壓低倍數、同類）：[字, 樣式, 說明]。一樣放名稱下面那排，排在最後；點進報表時也帶過去
+// 跟著目前條件變的標籤（只列是哪幾個字，樣式和說明在共用標籤裡）；點進報表時也帶過去
 const condTags = r => { const sv = sims(r), rep = r["代表"] && r["代表"].split("_")[0]; return [
-  ...(r["編號"] === BH ? [["對照", "do", "買進持有：拿來跟每一支策略比的基準"]] : []),
-  ...(r["碰上限"] ? [["到上限", "warn", "照規則算出來的倍數超過原始保證金能開的上限，壓在上限"]] : []),
-  ...(r["壓低"] ? [["壓低倍數", "warn", "照規則的倍數，口數固定、不補錢時會被追繳，所以壓到不會被追繳的倍數"]] : []),
-  ...(rep ? [[`同類・${rep} 代表`, "do", `跟 ${rep} 很像，榜上平常只留 ${rep}，搜尋時才單獨列出`]] : []),
-  ...(sv.length ? [[`同類 ${sv.length} 支`, "do", "很像的策略只留這支，點開看其他幾支"]] : [])]; };
-const tagsOf = c => { const v = INFO[c]; return v ? [...grTags(v), ...v["看"], ...v["做"], ...(v["筆"] < 20 ? ["筆數少"] : [])] : []; };
+  ...(r["編號"] === BH ? ["對照"] : []), ...(r["碰上限"] ? ["到上限"] : []), ...(r["壓低"] ? ["壓低倍數"] : []),
+  ...(rep ? [`同類・${rep} 代表`] : []), ...(sv.length ? [`同類 ${sv.length} 支`] : [])]; };
+const tagsOf = c => tagList(tagV(c)).map(x => x[0]);
 const days = h => h < 1 ? "不到 1 天" : (h >= 10 ? Math.round(h) : h.toFixed(1).replace(/\.0$/, "")) + " 天";
 const freq = y => y >= 1 ? `一年約 ${y >= 10 ? Math.round(y) : y.toFixed(1).replace(/\.0$/, "")} 次` : y > 0 ? `約 ${Math.round(1 / y)} 年 1 次` : "";
 const when = a => a.map(x => TM[x]).join("或");
@@ -484,7 +512,7 @@ function renderTable() {
     return `<button data-t="${t}" class="${on ? "on" : ""}" ${why ? `disabled title="${why}"` : ""}>${t}<small>${n}</small></button>`;
   };
   $("tagbar").innerHTML = (st.tags.size + st.no.size ? `<div class="grp"><button class="clr" data-t="">✕ 清除標籤（只看 ${st.tags.size} 個、不看 ${st.no.size} 個）</button></div>` : "") +
-    `<div class="grp"><span>看什麼</span>${LOOK.map(tagBtn).join("")}</div><div class="grp"><span>怎麼做</span>${DO.map(tagBtn).join("")}</div>${["長期", "單日"].map(g => `<div class="grp"><span title="${GR_TIP[g]}">${g}</span>${[..."ABCDE"].map(x => tagBtn(g + " " + x)).join("")}</div>`).join("")}`;
+    `<div class="grp"><span>看什麼</span>${LOOK.map(tagBtn).join("")}</div><div class="grp"><span>怎麼做</span>${DO.map(tagBtn).join("")}</div>${["長期", "單日"].map(g => `<div class="grp"><span title="${tagScale(g)}">${g}</span>${[..."ABCDE"].map(x => tagBtn(g + " " + x)).join("")}</div>`).join("")}`;
   $("tagbar").querySelectorAll("button").forEach(b => b.onclick = () => {
     const t = b.dataset.t;
     if (!t) { st.tags.clear(); st.no.clear(); }
@@ -517,14 +545,12 @@ function renderTable() {
   });
   tbl.querySelector("tbody").innerHTML = rs.map(r => {
     const c = r["編號"], isRef = c === BH, n = r["名次"], open = st.open.has(c), v = INFO[c];
-    const chips = v ? grTags(v).map(t => `<span class="tg do" title="${GR_TIP[t.slice(0, 2)]}">${t}</span>`).join("") + v["看"].map(t => `<span class="tg">${t}</span>`).join("") + v["做"].map(t => `<span class="tg do">${t}</span>`).join("") +
-      (v["筆"] < 20 ? `<span class="tg warn" title="全部期間只有 ${v["筆"]} 筆，數字不太能信">筆數少</span>` : "") : "";
-    const cond = condTags(r);
+    const chips = tagHtml(tagList(tagV(c), condTags(r)));
     return `<tr class="row ${isRef ? "ref" : ""} ${st.picked.has(c) ? "sel" : ""} ${open ? "open" : ""}" data-c="${esc(c)}">
       <td class="c"><input type="checkbox" data-c="${esc(c)}" ${st.picked.has(c) ? "checked" : ""} aria-label="加入走勢比較"></td>
       <td class="c"><span class="rk ${n <= 3 ? "t" + n : ""} num">${n}</span></td>
       <td class="l name"><span class="chev">▶</span>${isRef ? "" : `<span class="code">${esc(c.split("_")[0])}</span>`}${esc(r["名稱"])}
-        <div class="how">${howText(r)}</div><div class="mini">放 ${r["倍數"].toFixed(2)} 倍・最大回落 ${pct(r["最大回落"])}</div>${chips || cond.length ? `<div class="tgs">${chips}${cond.map(([t, k, tip]) => `<span class="tg ${k}" title="${tip}">${esc(t)}</span>`).join("")}</div>` : ""}</td>
+        <div class="how">${howText(r)}</div><div class="mini">放 ${r["倍數"].toFixed(2)} 倍・最大回落 ${pct(r["最大回落"])}</div>${chips ? `<div class="tgs">${chips}</div>` : ""}</td>
       <td><div class="ret"><b class="num">${pct(r["年化"])}</b></div></td>
       <td class="num hide-s" title="${needTip(r["倍數"])}">${r["倍數"].toFixed(2)}</td>
       <td class="num hide-s">${pct(r["最大回落"])}</td>
@@ -574,7 +600,7 @@ function detail(r, sc) {
       cell("賺錢月份", pct(r["賺錢月份"], 0), "only-m") + cell("最慘一年", pct(r["最慘一年"]), "only-m") + cell("有部位的日子", pct(r["有部位"], 0), "only-m") +
       cell("平均每筆賺", r["每筆賺"] == null ? "—" : pct(r["每筆賺"], 2), "only-m") + cell("有部位每天賺", pct(r["每天賺"], 2), "only-m")}
     ${v ? cell("全部期間筆數", fmt(v["筆"]) + " 筆") + cell("最近一次進場", v["上次"]) : ""}
-    ${DATA["有報表"].includes(c) ? `<div><a href="report.html?c=${encodeURIComponent(c)}&t=${encodeURIComponent(condTags(r).map(x => x[0]).join(","))}#${encodeURIComponent(c)}">看這支的完整報表 →</a></div>` : ""}
+    ${DATA["有報表"].includes(c) ? `<div><a href="report.html?c=${encodeURIComponent(c)}&t=${encodeURIComponent(condTags(r).join(","))}#${encodeURIComponent(c)}">看這支的完整報表 →</a></div>` : ""}
     ${sv.length ? `<div class="wide"><span class="k">同類還有 ${sv.length} 支（${r["代表"] ? `榜上平常只留 ${esc(r["代表"].split("_")[0])}` : "很像所以只留上面這支"}；數字是這個條件下的）</span><div class="simlist">${sv.map(x => [x, nums[x]]).sort((p, q) => (q[1] ? q[1][0] : -9) - (p[1] ? p[1][0] : -9)).map(([x, y]) =>
       `<div>${esc(simName(x))}<span>${y ? `一年賺 ${pct(y[0])}・勝率 ${y[1] == null ? "—" : pct(y[1], 0)}` : noRow(x)}</span></div>`).join("")}</div></div>` : ""}
   </div>`;
