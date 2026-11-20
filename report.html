@@ -187,7 +187,7 @@ table{border-collapse:collapse;width:100%}
     <button class="iconbtn" id="theme" title="切換深色／淺色">◐</button>
   </div>
   <div class="bar2">
-    <label>資金 <input type="number" id="cap" step="100000" min="0" style="width:130px"> 元</label>
+    <label>資金 <input type="number" id="cap" step="100000" min="0" placeholder="自己填" style="width:130px"> 元</label>
     <label>商品 <span class="seg" id="prod"><button data-v="大台">大台</button><button data-v="小台">小台</button><button data-v="微台">微台</button></span></label>
     <label>口數 <input type="number" id="lots" step="1" min="1" style="width:74px"> 口</label>
     <span class="now" id="now"></span>
@@ -220,7 +220,7 @@ table{border-collapse:collapse;width:100%}
       <div class="card" id="s-deep"><h2>中間的帳面最深（還沒出場時）</h2>
         <p class="h2s" id="deep-sub"></p>
         <table class="kv" id="deep"></table>
-        <div class="tools" style="margin:10px 0 0">帳面賠超過 <input type="number" id="thr" step="10000" min="0"> 元算一次</div>
+        <div class="tools" style="margin:10px 0 0">帳面賠超過 <input type="number" id="thr" step="10000" min="0" placeholder="自己填"> 元算一次</div>
       </div>
       <div class="card" id="s-margin" style="margin-bottom:0"><h2>追繳和斷頭</h2>
         <p class="h2s">照上面的資金和口數，把歷史每一筆逐日走一遍。收盤後帳戶低於維持保證金算追繳；盤中帳戶低於原始保證金的 25% 算斷頭。</p>
@@ -292,9 +292,9 @@ const yr = i => Math.floor(D.日期[i] / 10000), ym = i => Math.floor(D.日期[i
 const U = 1e7;                                  // 資料檔裡的比例存成整數（千萬分之一）
 const BH = D.買進持有.map(v => v / U), DAYR = D.白天.map(v => v / U);
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-let S = {cap: CONFIG.資金, prod: CONFIG.商品, lots: CONFIG.口數, init: CONFIG.大台原始, maint: CONFIG.大台維持, thr: null};
-try { Object.assign(S, JSON.parse(localStorage.getItem("rpt-set") || "{}")); } catch (e) {}
-const save = () => { try { localStorage.setItem("rpt-set", JSON.stringify(S)); } catch (e) {} };
+let S = {cap: null, prod: CONFIG.商品, lots: CONFIG.口數, init: CONFIG.大台原始, maint: CONFIG.大台維持, thr: null};
+try { Object.assign(S, JSON.parse(localStorage.getItem("rpt-set2") || "{}")); } catch (e) {}
+const save = () => { try { localStorage.setItem("rpt-set2", JSON.stringify(S)); } catch (e) {} };
 let cur = null, DATA = {}, T = [], view = null, sortKey = "e", sortDir = -1, shown = 500;
 
 // ===== 數字格式 =====
@@ -454,7 +454,7 @@ function stats(d, p) {
     ["勝率", pct0(s.win), b ? `任選一天抱${b.h}：${pct0(b.win)}` : "賺 " + s.nw + "、賠 " + s.nl],
     ["平均一次", col(s.avg, wan(s.avg, 2)), pct(s.avgr) + (b ? `（任選一天 ${pct(b.avg)}）` : "")],
     ["最賠的一次", col(s.worst ? s.worst.amt : 0, s.worst ? wan(s.worst.amt) : "—"), s.worst ? `${pct(s.worst.r)}，${ds(s.worst.e)}` : ""],
-    ["累積損益最深回落", col(dd, wan(dd)), `占資金 ${pct0(-dd / S.cap)}`],
+    ["累積損益最深回落", col(dd, wan(dd)), S.cap ? `占資金 ${pct0(-dd / S.cap)}` : ""],
   ].map(k => `<div class="kpi"><label>${k[0]}</label><div class="v">${k[1]}</div><small>${k[2]}</small></div>`).join("");
   $("#stat-sub").textContent = `${S.lots} 口${S.prod}。金額是每筆的報酬率 × 現在的合約價值，也就是「同樣的漲跌幅發生在現在的指數水位」，不是當年實際的金額。小字是每一口的報酬率。` +
     (d.只記加碼 ? "" : "「全部加起來」和下面累積損益圖最右邊的數字是同一個。");
@@ -469,18 +469,18 @@ function stats(d, p) {
     r("賺的時候平均賺", s.nw ? col(s.aw, money(s.aw)) + `<small>${pct(s.awr)}</small>` : "—"),
     r("賠的時候平均賠", s.nl ? col(s.al, money(s.al)) + `<small>${pct(s.alr)}</small>` : "—"),
     r("賺賠比", isNaN(s.ratio) ? "—" : s.ratio.toFixed(2) + `<small>平均賺 ÷ 平均賠</small>`),
-    r("全部加起來", col(s.tot, money(s.tot)) + `<small>占資金 ${pct(s.tot / S.cap, 0)}</small>`),
+    r("全部加起來", col(s.tot, money(s.tot)) + (S.cap ? `<small>占資金 ${pct(s.tot / S.cap, 0)}</small>` : "")),
   ].join("");
 }
 
 function deep(d, p) {
-  const a = [...T].sort((x, y) => x.deep - y.deep), thr = S.thr == null ? Math.round(S.cap * 0.1 / 10000) * 10000 : S.thr;
-  $("#thr").value = thr;
+  const a = [...T].sort((x, y) => x.deep - y.deep), thr = S.thr;
+  $("#thr").value = thr ?? "";
   $("#deep-sub").textContent = `${S.lots} 口${S.prod}，跟交易統計同一種算法。每一筆從進場到出場，帳面上最難看的那一刻賠多少（看每天最不利的價格：做多看最低、做空看最高）。`;
   const one = t => t ? col(t.deep, money(t.deep)) + `<small>${pct(t.m)}</small>` + when(t) + `<small>最後 ${pct(t.r)}</small>` : "—";
   const n = T.filter(t => t.deep < -thr).length;
   $("#deep").innerHTML = `<tr><td>歷史最深</td><td>${one(a[0])}</td></tr><tr><td>第二深</td><td>${one(a[1])}</td></tr>
-    <tr><td>帳面曾經賠超過 ${thr.toLocaleString()} 元</td><td>${n} 次<small>共 ${T.length} 次裡，占 ${pct0(T.length ? n / T.length : NaN)}</small></td></tr>
+    ${thr == null ? `<tr><td>帳面曾經賠超過幾元</td><td><small>下面填了金額才會算</small></td></tr>` : `<tr><td>帳面曾經賠超過 ${thr.toLocaleString()} 元</td><td>${n} 次<small>共 ${T.length} 次裡，占 ${pct0(T.length ? n / T.length : NaN)}</small></td></tr>`}
     <tr><td>中位數（一般的一筆）</td><td>${col(median(T.map(t => t.deep)), money(median(T.map(t => t.deep))))}<small>${pct(median(T.map(t => t.m)))}</small></td></tr>`;
 }
 
@@ -497,10 +497,10 @@ function margin(d, p) {
   const nc = need((w, M, C) => w * p.maint1 - C * p.cv1), nk = need((w, M) => w * CONFIG.斷頭比例 * p.init1 - M * p.cv1);
   const maxw = all.reduce((a, [w]) => Math.max(a, w), 1), open = maxw * p.init1 * N;
   const which = a => a.length ? `<small>${a.slice(0, 6).map(t => ds(t.e)).join("、")}${a.length > 6 ? " …等" : ""} 進場的那幾${d.段 ? "段" : "筆"}</small>` : "";
-  $("#margin").innerHTML = (cap < open ? `<tr><td colspan="2" style="text-align:left"><div class="warnbox" style="margin:0 0 6px">這個資金放不出 ${maxw * N} 口${S.prod}的原始保證金（要 ${Math.round(open).toLocaleString()} 元），下面的次數是假設還是照做的結果。</div></td></tr>` : "") +
-    `<tr><td>歷史上被追繳</td><td>${col(-call.length, call.length + " 次")}${which(call)}</td></tr>
+  $("#margin").innerHTML = (cap != null && cap < open ? `<tr><td colspan="2" style="text-align:left"><div class="warnbox" style="margin:0 0 6px">這個資金放不出 ${maxw * N} 口${S.prod}的原始保證金（要 ${Math.round(open).toLocaleString()} 元），下面的次數是假設還是照做的結果。</div></td></tr>` : "") +
+    (cap == null ? `<tr><td>歷史上被追繳、被斷頭</td><td><small>最上面填了資金才會算</small></td></tr>` : `<tr><td>歷史上被追繳</td><td>${col(-call.length, call.length + " 次")}${which(call)}</td></tr>
     <tr><td>歷史上被斷頭</td><td>${col(-cut.length, cut.length + " 次")}${which(cut)}</td></tr>
-    <tr><td>盤中風險指標最低</td><td>${isFinite(risk) ? col(risk < 0.25 ? -1 : 0, (risk * 100).toFixed(0) + "%") : "—"}<small>帳戶的錢 ÷ 原始保證金，低於 25% 斷頭</small></td></tr>
+    <tr><td>盤中風險指標最低</td><td>${isFinite(risk) ? col(risk < 0.25 ? -1 : 0, (risk * 100).toFixed(0) + "%") : "—"}<small>帳戶的錢 ÷ 原始保證金，低於 25% 斷頭</small></td></tr>`) + `
     <tr><td>${N} 口，歷史上一次都沒被追繳的最低資金</td><td>${Math.ceil(nc * N).toLocaleString()} 元</td></tr>
     <tr><td>${N} 口，歷史上一次都沒被斷頭的最低資金</td><td>${Math.ceil(nk * N).toLocaleString()} 元</td></tr>`;
   $("#margin-note").innerHTML = [
@@ -608,7 +608,7 @@ function years(d, p) {
   c._st = {ys, Y, L, bw};
   if (!c._on) { c._on = 1;
     c.addEventListener("mousemove", e => { const st = c._st, i = Math.floor((e.clientX - c.getBoundingClientRect().left - st.L) / st.bw), y = st.ys[i];
-      tip(e, y ? `<b>${y} 年</b><br>這支 ${wan(st.Y[y][0])}（占資金 ${pct(st.Y[y][0] / S.cap, 0)}）<br>買進持有 ${wan(st.Y[y][1])}` : null); });
+      tip(e, y ? `<b>${y} 年</b><br>這支 ${wan(st.Y[y][0])}${S.cap ? `（占資金 ${pct(st.Y[y][0] / S.cap, 0)}）` : ""}<br>買進持有 ${wan(st.Y[y][1])}` : null); });
     c.addEventListener("mouseleave", () => tip()); }
   const mx = Math.max(1, ...Object.values(M).map(Math.abs));
   const cell = (v, k, t) => `<td class="${t || ""}" data-t="${k}：${money(v)}" style="background:rgba(${css(v >= 0 ? "--good-rgb" : "--bad-rgb")},${v ? (0.1 + 0.75 * Math.min(1, Math.abs(v) / mx)).toFixed(2) : 0})">${v ? (v / p.unit * 100).toFixed(1) + "%" : "·"}</td>`;
@@ -724,12 +724,12 @@ function doc(d) {
 
 // ===== 操作 =====
 function bindInputs() {
-  $("#cap").value = S.cap; $("#lots").value = S.lots; $("#m-init").value = S.init; $("#m-maint").value = S.maint;
+  $("#cap").value = S.cap ?? ""; $("#lots").value = S.lots; $("#m-init").value = S.init; $("#m-maint").value = S.maint;
   $$("#prod button").forEach(b => b.classList.toggle("on", b.dataset.v === S.prod));
 }
-const num = (id, key, min) => $(id).addEventListener("input", e => { const v = +e.target.value; if (!(v >= min)) return; S[key] = v; if (key === "cap") S.thr = null; save(); render(); });
+const num = (id, key, min) => $(id).addEventListener("input", e => { let v = +e.target.value; if (key === "cap" && e.target.value === "") v = null; else if (!(v >= min)) return; S[key] = v; save(); render(); });
 num("#cap", "cap", 1); num("#lots", "lots", 1); num("#m-init", "init", 1); num("#m-maint", "maint", 1);
-$("#thr").addEventListener("input", e => { S.thr = Math.max(0, +e.target.value || 0); save(); deep(DATA[cur], P()); });
+$("#thr").addEventListener("input", e => { S.thr = e.target.value === "" ? null : Math.max(0, +e.target.value || 0); save(); deep(DATA[cur], P()); });
 $("#m-reset").onclick = () => { S.init = CONFIG.大台原始; S.maint = CONFIG.大台維持; save(); bindInputs(); render(); };
 const segBtn = (sel, fn) => $(sel).addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; $$(sel + " button").forEach(x => x.classList.toggle("on", x === b)); fn(b.dataset.v); });
 segBtn("#prod", v => { S.prod = v; save(); render(); });
