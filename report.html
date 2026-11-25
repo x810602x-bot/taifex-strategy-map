@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>台指期策略報表</title>
+<title>策略報表</title>
 <style>
 :root{
   --bg:#f3f5f8;--card:#fff;--raise:#f8f9fb;--ink:#141a26;--sub:#5d6778;--faint:#8b94a3;--line:#e3e7ee;
@@ -170,7 +170,17 @@ table{border-collapse:collapse;width:100%}
 <body>
 <div class="top"><div class="in">
   <div class="bar1">
-    <div class="brand"><i>報</i>台指期策略報表</div>
+    <!-- 兩頁共用的最上面分頁（排行榜、近期新聞）：只寫在這裡，算試看.py 原封不動放進排行榜和報表最上面那一列 -->
+<style>
+.tabs{display:flex;gap:2px;align-self:stretch}
+.tabs a{display:flex;align-items:center;min-height:40px;padding:0 14px;color:var(--sub);font-weight:500;text-decoration:none;border-bottom:2px solid transparent;border-top:2px solid transparent;white-space:nowrap}
+.tabs a:hover{color:var(--ink)}
+.tabs a.on{color:var(--acc);border-bottom-color:var(--acc);font-weight:700}
+@media (max-width:900px){.tabs a{padding:0 10px;font-size:14px}}
+@media (max-width:640px){.tabs a{padding:0 6px;font-size:13.5px}}
+</style>
+<nav class="tabs" id="tabs"><a href="index.html#rank" data-v="rank">排行榜</a><a href="index.html#news" data-v="news">近期新聞</a></nav>
+
     <div class="pick">
       <button class="iconbtn" id="prev" title="上一支">◀</button>
       <button class="pickbtn" id="pickbtn"><b id="pk-code"></b><span id="pk-name"></span><span class="faint">▾</span></button>
@@ -188,7 +198,7 @@ table{border-collapse:collapse;width:100%}
     </div>
     <span class="sp"></span>
     <span class="chip" id="asof"></span>
-    <a class="chip" href="index.html">← 排行榜</a>
+    
     <button class="iconbtn" id="theme" title="切換深色／淺色">◐</button>
   </div>
   <div class="bar2">
@@ -386,7 +396,7 @@ function load(code) {
   if (!BY[code]) code = BY["L315"] ? "L315" : LIST[0].code;
   cur = code; openPanel(false);
   $("#pk-code").textContent = code; $("#pk-name").textContent = BY[code].name;
-  document.title = code + " " + BY[code].name + "｜台指期策略報表";
+  document.title = code + " " + BY[code].name;
   if (DATA[code]) return ready();
   $("#title").textContent = code + "　載入中…";
   const s = document.createElement("script");
