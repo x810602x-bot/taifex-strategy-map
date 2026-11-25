@@ -65,6 +65,12 @@ main{max-width:1180px;margin:0 auto;padding:22px 20px 90px}
 #v-news a{color:var(--acc)}
 #v-news details summary{cursor:pointer;color:var(--acc);font-size:13.5px;margin-top:10px}
 #v-news .note{color:var(--sub);font-size:13.5px;margin:10px 0 0}
+#v-news td.r{min-width:240px}
+#v-news td.r .no{color:var(--faint)}
+#v-news .bias{display:inline-block;font-size:12.5px;font-weight:700;border-radius:999px;padding:0 9px;margin-right:8px;line-height:20px}
+#v-news .bias.up{color:#e5484d;background:rgba(229,72,77,.14)}
+#v-news .bias.down{color:#1f9d5c;background:rgba(31,157,92,.14)}
+#v-news .bias.flat{color:var(--sub);background:var(--raise)}
 
 /* 多空切換 */
 .side{display:inline-grid;grid-template-columns:repeat(3,1fr);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;box-shadow:var(--shadow)}
@@ -348,21 +354,22 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
 
 <!-- 近期新聞：內容在 近期新聞.html，算試看.py 放進來 -->
 <section class="view" id="v-news">
-<!-- 排行榜「近期新聞」分頁的內容（手寫，不會自動更新）。改完跑 算試看.py 再推上線。 -->
-<div class="head"><div><h1>近期大事（到 12/15）</h1><p>整理日期 2026-11-25。時間都是台灣時間，日期大多是新聞和經濟行事曆上寫的，以官方公告為準。底色標起來的是比較會動到大盤的事。</p></div></div>
+<!-- 排行榜「近期新聞」分頁的內容（手寫，不會自動更新）。改完跑 算試看.py 再推上線。
+     結果欄：已經發生的寫數字和判斷，偏多 <span class="bias up">、偏空 <span class="bias down">、看不出來 <span class="bias flat">；還沒發生寫 <span class="no">還沒發生</span>。 -->
+<div class="head"><div><h1>近期大事（到 12/15）</h1><p>整理日期 2026-11-25，結果更新到 11/25 15:00。時間都是台灣時間，日期大多是新聞和經濟行事曆上寫的，以官方公告為準。底色標起來的是比較會動到大盤的事；結果欄紅色是偏多、綠色是偏空（台股習慣）。</p></div></div>
 
 <div class="card pad">
   <h2>這週</h2>
   <div class="scroll"><table>
-    <thead><tr><th>日期</th><th>時間</th><th>事件</th></tr></thead>
+    <thead><tr><th>日期</th><th>時間</th><th>事件</th><th>結果</th></tr></thead>
     <tbody>
-      <tr><td class="d">11/25（三）</td><td class="t">13:45</td><td>台指期日盤收盤，結算價決定隔天的漲跌停和要不要追繳</td></tr>
-      <tr><td class="d"></td><td class="t">15:00 左右</td><td>期交所公布三大法人，看外資台指期淨空單（11/24 約 10.3 萬口）有沒有變</td></tr>
-      <tr class="key"><td class="d"></td><td class="t">21:30</td><td class="e">美國 10 月 PCE 通膨（核心預估月增 0.3%）、第三季 GDP、初領失業金、耐久財訂單</td></tr>
-      <tr><td class="d">11/26（四）</td><td class="t">凌晨 3:00</td><td>聯準會褐皮書</td></tr>
-      <tr><td class="d"></td><td class="t">全天</td><td>美國感恩節，美股休市（台股、台指期照常）</td></tr>
-      <tr><td class="d">11/27（五）</td><td class="t"></td><td>美股只開半天（台灣週六凌晨 2:00 收盤），黑色星期五</td></tr>
-      <tr class="key"><td class="d">11/28（六）</td><td class="t"></td><td class="e">台灣九合一地方選舉，加上核電公投</td></tr>
+      <tr><td class="d">11/25（三）</td><td class="t">13:45</td><td>台指期日盤收盤，結算價決定隔天的漲跌停和要不要追繳</td><td class="r"><span class="bias down">偏空</span>收 38,062，跌 2,262 點（−5.6%），結算價 38,123。盤中最低 36,500，收盤前拉回約 1,560 點。加權指數收 38,195（−4.8%）。</td></tr>
+      <tr><td class="d"></td><td class="t">15:00 左右</td><td>期交所公布三大法人，看外資台指期淨空單（11/24 約 10.3 萬口）有沒有變</td><td class="r"><span class="bias down">偏空</span>外資淨空單 105,709 口，比前一天多 2,527 口。</td></tr>
+      <tr class="key"><td class="d"></td><td class="t">21:30</td><td class="e">美國 10 月 PCE 通膨（核心預估月增 0.3%）、第三季 GDP、初領失業金、耐久財訂單</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="d">11/26（四）</td><td class="t">凌晨 3:00</td><td>聯準會褐皮書</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="d"></td><td class="t">全天</td><td>美國感恩節，美股休市（台股、台指期照常）</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="d">11/27（五）</td><td class="t"></td><td>美股只開半天（台灣週六凌晨 2:00 收盤），黑色星期五</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr class="key"><td class="d">11/28（六）</td><td class="t"></td><td class="e">台灣九合一地方選舉，加上核電公投</td><td class="r"><span class="no">還沒發生</span></td></tr>
     </tbody>
   </table></div>
 </div>
@@ -370,13 +377,13 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
 <div class="card pad">
   <h2>下週</h2>
   <div class="scroll"><table>
-    <thead><tr><th>日期</th><th>時間</th><th>事件</th></tr></thead>
+    <thead><tr><th>日期</th><th>時間</th><th>事件</th><th>結果</th></tr></thead>
     <tbody>
-      <tr><td class="d">11/30（一）</td><td class="t"></td><td>選後第一個交易日；MSCI 調高台股權重，收盤生效</td></tr>
-      <tr><td class="d">12/1（二）</td><td class="t">23:00</td><td>美國職缺數據</td></tr>
-      <tr class="key"><td class="d">12/2（三）</td><td class="t">凌晨</td><td class="e">黃仁勳到美國眾議院三個委員會閉門作證</td></tr>
-      <tr class="key"><td class="d">12/4（五）</td><td class="t"></td><td class="e">輝達延後的季報（10-Q）截止日，最多可以再延 5 天</td></tr>
-      <tr><td class="d"></td><td class="t">21:30</td><td>美國 11 月非農就業（聯準會開會前最後一份就業報告）</td></tr>
+      <tr><td class="d">11/30（一）</td><td class="t"></td><td>選後第一個交易日；MSCI 調高台股權重，收盤生效</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="d">12/1（二）</td><td class="t">23:00</td><td>美國職缺數據</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr class="key"><td class="d">12/2（三）</td><td class="t">凌晨</td><td class="e">黃仁勳到美國眾議院三個委員會閉門作證</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr class="key"><td class="d">12/4（五）</td><td class="t"></td><td class="e">輝達延後的季報（10-Q）截止日，最多可以再延 5 天</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="d"></td><td class="t">21:30</td><td>美國 11 月非農就業（聯準會開會前最後一份就業報告）</td><td class="r"><span class="no">還沒發生</span></td></tr>
     </tbody>
   </table></div>
 </div>
@@ -384,15 +391,15 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
 <div class="card pad">
   <h2>第三週</h2>
   <div class="scroll"><table>
-    <thead><tr><th>日期</th><th>時間</th><th>事件</th></tr></thead>
+    <thead><tr><th>日期</th><th>時間</th><th>事件</th><th>結果</th></tr></thead>
     <tbody>
-      <tr><td class="d">12/7～12/9 前後</td><td class="t"></td><td>台灣 11 月出口</td></tr>
-      <tr class="key"><td class="d">12/10（四）</td><td class="t">凌晨 3:00</td><td class="e">聯準會利率決議，3:30 記者會（市場估升 1 碼約 95%）</td></tr>
-      <tr><td class="d"></td><td class="t">清晨</td><td>博通財報</td></tr>
-      <tr><td class="d"></td><td class="t">21:30</td><td>美國 11 月 CPI（剛好在利率決議之後）</td></tr>
-      <tr><td class="d">12/10 前後</td><td class="t"></td><td>台積電 11 月營收</td></tr>
-      <tr><td class="d">12/15（二）</td><td class="t">清晨</td><td>Oracle 財報（只有一個網站寫這天，還沒確認）</td></tr>
-      <tr><td class="d"></td><td class="t">08:45</td><td>L317（11/16 加權大跌那次）抱滿 20 天的賣出日</td></tr>
+      <tr><td class="d">12/7～12/9 前後</td><td class="t"></td><td>台灣 11 月出口</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr class="key"><td class="d">12/10（四）</td><td class="t">凌晨 3:00</td><td class="e">聯準會利率決議，3:30 記者會（市場估升 1 碼約 95%）</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="d"></td><td class="t">清晨</td><td>博通財報</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="d"></td><td class="t">21:30</td><td>美國 11 月 CPI（剛好在利率決議之後）</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="d">12/10 前後</td><td class="t"></td><td>台積電 11 月營收</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="d">12/15（二）</td><td class="t">清晨</td><td>Oracle 財報（只有一個網站寫這天，還沒確認）</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="d"></td><td class="t">08:45</td><td>L317（11/16 加權大跌那次）抱滿 20 天的賣出日</td><td class="r"><span class="no">還沒發生</span></td></tr>
     </tbody>
   </table></div>
 </div>
@@ -419,6 +426,8 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
   <details>
     <summary>資料來源</summary>
     <ul>
+      <li><a href="https://www.taifex.com.tw/cht/3/futDataDown" target="_blank" rel="noopener">期交所：期貨每日交易行情（收盤、結算價）</a></li>
+      <li><a href="https://www.taifex.com.tw/cht/3/futContractsDate" target="_blank" rel="noopener">期交所：三大法人－區分各期貨契約（外資淨空單）</a></li>
       <li><a href="https://www.federalreserve.gov/newsevents/2026-december.htm" target="_blank" rel="noopener">聯準會：2026 年 12 月行事曆</a></li>
       <li><a href="https://fedratecalc.com/us-economic-calendar/december-2026/" target="_blank" rel="noopener">FedRateCalc：2026 年 12 月美國經濟行事曆</a></li>
       <li><a href="https://www.investing.com/news/stock-market-news/gdp-jobless-claims-and-pce-among-key-data-due-wednesday-93CH-5048884" target="_blank" rel="noopener">Investing.com：11/25 GDP、初領失業金、PCE</a></li>
