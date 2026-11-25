@@ -170,7 +170,7 @@ table{border-collapse:collapse;width:100%}
 <body>
 <div class="top"><div class="in">
   <div class="bar1">
-    <!-- 兩頁共用的最上面分頁（期貨、近期新聞）：只寫在這裡，算試看.py 原封不動放進排行榜和報表最上面那一列 -->
+    <!-- 共用的最上面分頁（期貨、股票、近期新聞）：只寫在這裡，算試看.py 原封不動放進排行榜和報表最上面那一列，股票排行榜/算排行榜.py 放進股票頁。股票是另一頁（data-page），不是排行榜裡切換的分頁（data-v） -->
 <style>
 .tabs{display:flex;gap:2px;align-self:stretch}
 .tabs a{display:flex;align-items:center;min-height:40px;padding:0 14px;color:var(--sub);font-weight:500;text-decoration:none;border-bottom:2px solid transparent;border-top:2px solid transparent;white-space:nowrap}
@@ -179,7 +179,7 @@ table{border-collapse:collapse;width:100%}
 @media (max-width:900px){.tabs a{padding:0 10px;font-size:14px}}
 @media (max-width:640px){.tabs a{padding:0 6px;font-size:13.5px}}
 </style>
-<nav class="tabs" id="tabs"><a href="index.html#rank" data-v="rank">期貨</a><a href="index.html#news" data-v="news">近期新聞</a></nav>
+<nav class="tabs" id="tabs"><a href="index.html#rank" data-v="rank">期貨</a><a href="stock.html" data-page="stock">股票</a><a href="index.html#news" data-v="news">近期新聞</a></nav>
 
     <div class="pick">
       <button class="iconbtn" id="prev" title="上一支">◀</button>

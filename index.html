@@ -210,7 +210,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
 </head>
 <body>
 <header class="top"><div class="in">
-  <!-- 兩頁共用的最上面分頁（期貨、近期新聞）：只寫在這裡，算試看.py 原封不動放進排行榜和報表最上面那一列 -->
+  <!-- 共用的最上面分頁（期貨、股票、近期新聞）：只寫在這裡，算試看.py 原封不動放進排行榜和報表最上面那一列，股票排行榜/算排行榜.py 放進股票頁。股票是另一頁（data-page），不是排行榜裡切換的分頁（data-v） -->
 <style>
 .tabs{display:flex;gap:2px;align-self:stretch}
 .tabs a{display:flex;align-items:center;min-height:40px;padding:0 14px;color:var(--sub);font-weight:500;text-decoration:none;border-bottom:2px solid transparent;border-top:2px solid transparent;white-space:nowrap}
@@ -219,7 +219,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
 @media (max-width:900px){.tabs a{padding:0 10px;font-size:14px}}
 @media (max-width:640px){.tabs a{padding:0 6px;font-size:13.5px}}
 </style>
-<nav class="tabs" id="tabs"><a href="index.html#rank" data-v="rank">期貨</a><a href="index.html#news" data-v="news">近期新聞</a></nav>
+<nav class="tabs" id="tabs"><a href="index.html#rank" data-v="rank">期貨</a><a href="stock.html" data-page="stock">股票</a><a href="index.html#news" data-v="news">近期新聞</a></nav>
 
   <div class="sp"></div>
   <span class="chip">資料到 <span id="dataEnd"></span> 日盤收盤</span>
@@ -598,7 +598,7 @@ const capShow = i => { $("capVal").textContent = CAPS[i][1]; $("capTicks").query
 $("capRange").oninput = e => capShow(e.target.value);
 $("capRange").onchange = e => { st.cap = CAPS[e.target.value][0]; go(); };
 $("capTicks").querySelectorAll("span").forEach(s => s.onclick = () => { $("capRange").value = s.dataset.i; capShow(s.dataset.i); st.cap = CAPS[s.dataset.i][0]; go(); });
-$("tabs").querySelectorAll("a").forEach(a => a.onclick = e => { e.preventDefault(); st.view = a.dataset.v; render(); scrollTo(0, 0); });   // 分頁是共用的連結，在這頁就不換頁、直接切換
+$("tabs").querySelectorAll("a[data-v]").forEach(a => a.onclick = e => { e.preventDefault(); st.view = a.dataset.v; render(); scrollTo(0, 0); });   // 分頁是共用的連結，在這頁就不換頁、直接切換（股票是另一頁，照常換頁）
 $("q").oninput = e => { st.q = e.target.value.trim().toLowerCase().replace(/[・\s]/g, ""); renderTable(); };
 $("helpBtn").onclick = () => { st.view = "rank"; render(); $("help").open = true; $("help").scrollIntoView({ behavior: "smooth" }); };
 try { const th = localStorage.getItem("v2theme"); if (th) document.documentElement.dataset.theme = th; } catch (e) {}
