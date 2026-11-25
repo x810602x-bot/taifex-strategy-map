@@ -734,6 +734,20 @@ const COLS0 = [["e", "進場日"], ["x", "出場日"], ["p", "進場價"], ["o",
 const tm = v => v < 0 ? "" : ` <span class="faint" style="font-size:12.5px">${v ? "15:00" : "08:45"}</span>`;
 const prc = v => isNaN(v) ? '<span class="faint">—</span>' : v.toLocaleString("en-US", {maximumFractionDigits: 1});
 const d8 = v => { const t = String(v); return t.slice(0, 4) + "-" + t.slice(4, 6) + "-" + t.slice(6); };
+// 固定抱幾天的（已出場的每一筆抱的天數都一樣，至少 3 筆）：還沒出場的那筆算預計哪天出場。資料之後的日子用週一到週五推，國定假日沒算
+function planned(t) {
+  const c = T.filter(z => !z.open), H = c.length >= 3 && c.every(z => z.h === c[0].h) ? c[0].h : 0;
+  if (!H) return "";
+  const n = D.日期.length, k = t.e + H, slot = c[c.length - 1].tb;
+  let day;
+  if (k < n) day = ds(k);
+  else {
+    const s = String(D.日期[n - 1]), dt = new Date(+s.slice(0, 4), +s.slice(4, 6) - 1, +s.slice(6));
+    for (let left = k - (n - 1); left > 0;) { dt.setDate(dt.getDate() + 1); if (dt.getDay() % 6) left--; }
+    day = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
+  }
+  return `<span title="這支每筆都抱 ${H} 天，照這個算；遇到國定假日會往後延">預計 ${day}</span>${tm(slot)}`;
+}
 function list() {
   const d = DATA[cur], wl = $("#l-wl .on").dataset.v, y = $("#l-year").value, ev = !!d.筆.大跌日;
   const COLS = ev ? [["ev", "大跌日"], ["drop", "加權跌幅"], ...COLS0] : COLS0;
@@ -747,7 +761,7 @@ function list() {
     : "進場價、出場價照這支自己的交易明細檔（有些明細檔沒有記出場價）。賺賠已經扣掉成本。";
   $("#list").innerHTML = `<thead><tr>${COLS.map(([k, n]) => `<th class="sort" data-k="${k}">${n}${sortKey === k ? (sortDir > 0 ? " ▲" : " ▼") : ""}</th>`).join("")}</tr></thead><tbody>` +
     rows.slice(0, shown).map(t => `<tr>${ev ? `<td>${d8(t.ev)}</td><td>${col(t.drop, pct(t.drop))}</td>` : ""}<td>${ds(t.e)}${tm(t.fill ? -1 : t.ta)}${t.fill ? ' <span class="stale">補</span>' : ""}</td>
-      <td>${t.open ? '<span class="faint">還沒出場</span>' : ds(t.x) + tm(t.fill ? -1 : t.tb)}</td><td>${prc(t.p)}</td><td>${t.open ? '<span class="faint">—</span>' : prc(t.o)}</td><td>${t.h}</td>
+      <td>${t.open ? (planned(t) || '<span class="faint">還沒出場</span>') : ds(t.x) + tm(t.fill ? -1 : t.tb)}</td><td>${prc(t.p)}</td><td>${t.open ? '<span class="faint">—</span>' : prc(t.o)}</td><td>${t.h}</td>
       <td>${t.q < 0 ? "空" : "多"} ${lotTxt(t.q * S.lots)}</td><td>${col(t.r, pct(t.r))}</td><td>${col(t.amt, money(t.amt))}</td>
       <td>${col(t.deep, money(t.deep))} <span class="sub">${pct(t.m)}</span></td></tr>`).join("") + "</tbody>";
   $("#l-more").hidden = rows.length <= shown;
