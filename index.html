@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>策略排行榜</title>
+<title>期貨排行榜</title>
 <style>
 :root{
   --bg:#f3f5f8;--card:#fff;--raise:#f8f9fb;--ink:#141a26;--sub:#5d6778;--faint:#8b94a3;--line:#e3e7ee;
@@ -619,7 +619,7 @@ function render() {
   const low = sc["列"].filter(r => r["方向"] === st.side && r["壓低"]).length;
   $("capNote").textContent = CAP_NOTE(st.cap) + " " + FLOOR_NOTE + (low ? `這個條件下${SIDE_NAME[st.side]}有 ${low} 支被壓低倍數。` : `這個條件下${SIDE_NAME[st.side]}沒有要壓低的。`); $("capNote").classList.toggle("hot", st.cap === "不限");
   save();
-  $("title").textContent = "策略排行榜";
+  $("title").textContent = "期貨排行榜";
   $("subtitle").textContent = "策略參考地圖：只列全部期間有賺錢的策略，很像的只留一支，照年化排名。";
   $("side").innerHTML = ["多", "空", "雙向"].map(s => `<button data-v="${s}" class="${st.side === s ? "on" : ""}">${SIDE_NAME[s]}<small>${sc["列"].filter(r => r["方向"] === s).length} 支</small></button>`).join("");
   $("side").querySelectorAll("button").forEach(b => b.onclick = () => { st.side = b.dataset.v; st.q = $("q").value = ""; render(); });
