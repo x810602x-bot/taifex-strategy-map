@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>近期大事</title>
+<style>
+:root{
+  --bg:#f3f5f8;--card:#fff;--raise:#f8f9fb;--ink:#141a26;--sub:#5d6778;--faint:#8b94a3;--line:#e3e7ee;
+  --acc:#1f5eff;--acc-soft:#e8efff;--warn:#b7791f;--warn-soft:#fff6e0;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 16px rgba(16,24,40,.05);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1016;--card:#161a22;--raise:#1b202a;--ink:#e8ebf1;--sub:#9ba5b5;--faint:#6d7787;--line:#272d39;
+  --acc:#6f9bff;--acc-soft:#1b2740;--warn:#f0b24a;--warn-soft:#332a14;--shadow:none}}
+:root[data-theme="dark"]{
+  --bg:#0d1016;--card:#161a22;--raise:#1b202a;--ink:#e8ebf1;--sub:#9ba5b5;--faint:#6d7787;--line:#272d39;
+  --acc:#6f9bff;--acc-soft:#1b2740;--warn:#f0b24a;--warn-soft:#332a14;--shadow:none}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+a{color:var(--acc)}
+.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--card) 94%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.in{max-width:1000px;margin:0 auto;padding:0 16px}
+.bar1{min-height:56px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 0}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;white-space:nowrap}
+.brand i{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--acc),#7c5cff);display:grid;place-items:center;color:#fff;font-style:normal;font-size:15px}
+.sp{flex:1}
+.chip{font-size:13px;color:var(--sub);border:1px solid var(--line);border-radius:999px;padding:3px 11px;white-space:nowrap;text-decoration:none;background:none;cursor:pointer}
+a.chip:hover,button.chip:hover{color:var(--acc);border-color:var(--acc)}
+.iconbtn{border:1px solid var(--line);background:var(--card);border-radius:8px;min-width:36px;height:36px;cursor:pointer;display:grid;place-items:center;font-size:15px;padding:0 8px}
+.iconbtn:hover{background:var(--raise)}
+main{padding:20px 0 40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px 20px;margin-bottom:16px}
+h1{font-size:22px;margin:0 0 4px}
+h2{font-size:18px;margin:0 0 10px}
+.h2s{color:var(--sub);font-size:14px;margin:0}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{font-size:13.5px;color:var(--faint);font-weight:500;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.d{white-space:nowrap;font-weight:700}
+td.t{white-space:nowrap;color:var(--sub)}
+tr.key td{background:var(--acc-soft)}
+tr.key td.e{font-weight:700}
+.note{color:var(--sub);font-size:14px}
+ol,ul{margin:0;padding-left:22px}
+li{margin:6px 0}
+.warn{background:var(--warn-soft);border-radius:10px;padding:9px 14px;color:var(--ink);font-size:14.5px;margin-top:12px}
+details summary{cursor:pointer;color:var(--acc);font-size:14px}
+details ul{margin-top:8px;font-size:14px}
+@media (max-width:600px){.card{padding:14px 12px}td,th{padding:8px 6px}table{font-size:14px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="in">
+  <div class="bar1">
+    <div class="brand"><i>聞</i>近期大事</div>
+    <span class="sp"></span>
+    <span class="chip">整理日期 2026-11-25</span>
+    <button class="chip" id="back" type="button">← 回上一頁</button>
+    <a class="chip" href="index.html">排行榜</a>
+    <button class="iconbtn" id="theme" title="切換深色／淺色">◐</button>
+  </div>
+</div></div>
+
+<main><div class="in">
+  <div class="card">
+    <h1>到 12/15 為止的大事</h1>
+    <p class="h2s">時間都是台灣時間。日期大多是新聞和經濟行事曆上寫的，以官方公告為準。</p>
+    <div class="warn">底色標起來的是比較會動到大盤的事。</div>
+  </div>
+
+  <div class="card">
+    <h2>這週</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>日期</th><th>時間</th><th>事件</th></tr></thead>
+      <tbody>
+        <tr><td class="d">11/25（三）</td><td class="t">13:45</td><td>台指期日盤收盤，結算價決定隔天的漲跌停和要不要追繳</td></tr>
+        <tr><td class="d"></td><td class="t">15:00 左右</td><td>期交所公布三大法人，看外資台指期淨空單（11/24 約 10.3 萬口）有沒有變</td></tr>
+        <tr class="key"><td class="d"></td><td class="t">21:30</td><td class="e">美國 10 月 PCE 通膨（核心預估月增 0.3%）、第三季 GDP、初領失業金、耐久財訂單</td></tr>
+        <tr><td class="d">11/26（四）</td><td class="t">凌晨 3:00</td><td>聯準會褐皮書</td></tr>
+        <tr><td class="d"></td><td class="t">全天</td><td>美國感恩節，美股休市（台股、台指期照常）</td></tr>
+        <tr><td class="d">11/27（五）</td><td class="t"></td><td>美股只開半天（台灣週六凌晨 2:00 收盤），黑色星期五</td></tr>
+        <tr class="key"><td class="d">11/28（六）</td><td class="t"></td><td class="e">台灣九合一地方選舉，加上核電公投</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h2>下週</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>日期</th><th>時間</th><th>事件</th></tr></thead>
+      <tbody>
+        <tr><td class="d">11/30（一）</td><td class="t"></td><td>選後第一個交易日；MSCI 調高台股權重，收盤生效</td></tr>
+        <tr><td class="d">12/1（二）</td><td class="t">23:00</td><td>美國職缺數據</td></tr>
+        <tr class="key"><td class="d">12/2（三）</td><td class="t">凌晨</td><td class="e">黃仁勳到美國眾議院三個委員會閉門作證</td></tr>
+        <tr class="key"><td class="d">12/4（五）</td><td class="t"></td><td class="e">輝達延後的季報（10-Q）截止日，最多可以再延 5 天</td></tr>
+        <tr><td class="d"></td><td class="t">21:30</td><td>美國 11 月非農就業（聯準會開會前最後一份就業報告）</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h2>第三週</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>日期</th><th>時間</th><th>事件</th></tr></thead>
+      <tbody>
+        <tr><td class="d">12/7～12/9 前後</td><td class="t"></td><td>台灣 11 月出口</td></tr>
+        <tr class="key"><td class="d">12/10（四）</td><td class="t">凌晨 3:00</td><td class="e">聯準會利率決議，3:30 記者會（市場估升 1 碼約 95%）</td></tr>
+        <tr><td class="d"></td><td class="t">清晨</td><td>博通財報</td></tr>
+        <tr><td class="d"></td><td class="t">21:30</td><td>美國 11 月 CPI（剛好在利率決議之後）</td></tr>
+        <tr><td class="d">12/10 前後</td><td class="t"></td><td>台積電 11 月營收</td></tr>
+        <tr><td class="d">12/15（二）</td><td class="t">清晨</td><td>Oracle 財報（只有一個網站寫這天，還沒確認）</td></tr>
+        <tr><td class="d"></td><td class="t">08:45</td><td>L317（11/16 加權大跌那次）抱滿 20 天的賣出日</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h2>沒有固定日期、隨時可能出來的</h2>
+    <ol>
+      <li><b>關稅調查結果</b>：美國對 16 個經濟體的「產能過剩」301 調查，台灣在名單裡，報導說最快這週公布，時間可能會改。</li>
+      <li><b>美國對半導體另一輪關稅</b>：報導說在研議。川普說兩年後晶片關稅上看 200%。</li>
+      <li><b>國發會 10 月景氣燈號</b>：通常月底前後公布（去年是 11/27）。9 月是 41 分紅燈。</li>
+      <li><b>限空令解除或調整、國安基金退場</b>：金管會隨時可能宣布。</li>
+      <li><b>川普的發文或受訪</b>。</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>12/15 之後</h2>
+    <ul>
+      <li>12/15（二）21:30：美國 PPI</li>
+      <li>12/16（三）：台指期 12 月合約結算</li>
+      <li>12/18（五）：日本央行開會，市場預期會升息</li>
+    </ul>
+    <p class="note">這頁只是整理行事曆和新聞，不是投資建議。</p>
+    <details>
+      <summary>資料來源</summary>
+      <ul>
+        <li><a href="https://www.federalreserve.gov/newsevents/2026-december.htm" target="_blank" rel="noopener">聯準會：2026 年 12 月行事曆</a></li>
+        <li><a href="https://fedratecalc.com/us-economic-calendar/december-2026/" target="_blank" rel="noopener">FedRateCalc：2026 年 12 月美國經濟行事曆</a></li>
+        <li><a href="https://www.investing.com/news/stock-market-news/gdp-jobless-claims-and-pce-among-key-data-due-wednesday-93CH-5048884" target="_blank" rel="noopener">Investing.com：11/25 GDP、初領失業金、PCE</a></li>
+        <li><a href="https://ustr.gov/about/policy-offices/press-office/press-releases/2026/march/ustr-initiates-section-301-investigations-relating-structural-excess-capacity-and-production" target="_blank" rel="noopener">美國貿易代表署：16 個經濟體產能過剩 301 調查</a></li>
+        <li><a href="https://www.ctee.com.tw/news/20261124702053-430701" target="_blank" rel="noopener">工商時報：川普說兩年後晶片關稅上看 200%</a></li>
+        <li><a href="https://uanalyze.com.tw/articles/7597359171" target="_blank" rel="noopener">優分析：MSCI 調升台股權重，11/30 盤後生效</a></li>
+        <li><a href="https://cna.com.tw/news/aipl/202608200078.aspx" target="_blank" rel="noopener">中央社：九合一大選 11/28 投票</a></li>
+        <li><a href="https://www.aljazeera.com/news/2026/11/21/trump-calls-for-nvidia-to-reinstate-brilliant-jensen-huang" target="_blank" rel="noopener">Al Jazeera：黃仁勳 12/1 到眾議院作證</a></li>
+        <li><a href="https://www.nacionale.com/en/articles/when-will-nvidia-file-10-q-december-4-deadline-what-happens-if-late-nasdaq" target="_blank" rel="noopener">Nacionale：輝達季報 12/4 截止</a></li>
+        <li><a href="https://www.earningswhispers.com/stocks/AVGO" target="_blank" rel="noopener">Earnings Whispers：博通財報 12/9（美國時間）</a></li>
+        <li><a href="https://finance.technews.tw/2025/11/27/october-economic-indicator/" target="_blank" rel="noopener">科技新報：去年 10 月景氣燈號 11/27 公布</a></li>
+      </ul>
+    </details>
+  </div>
+</div></main>
+
+<script>
+const $ = s => document.querySelector(s);
+$("#back").onclick = () => history.length > 1 ? history.back() : (location.href = "index.html");
+$("#theme").onclick = () => { const r = document.documentElement, dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme:dark)").matches;
+  r.dataset.theme = dark ? "light" : "dark"; try { localStorage.setItem("rpt-theme", r.dataset.theme); } catch (e) {} };
+try { const t = localStorage.getItem("rpt-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</body>
+</html>
