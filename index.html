@@ -65,6 +65,9 @@ main{max-width:1180px;margin:0 auto;padding:22px 20px 90px}
 #v-news a{color:var(--acc)}
 #v-news details summary{cursor:pointer;color:var(--acc);font-size:13.5px;margin-top:10px}
 #v-news .note{color:var(--sub);font-size:13.5px;margin:10px 0 0}
+#v-news .hint{color:var(--sub);font-size:13px;line-height:1.55;margin-top:4px;font-weight:400}
+#v-news .anytime{border-color:var(--warn);background:var(--warn-soft)}
+#v-news .anytime h2{color:var(--warn)}
 #v-news .wk{font-size:13px;font-weight:700;color:var(--faint);margin:20px 0 8px;letter-spacing:.05em}
 #v-news .day table{table-layout:fixed}
 #v-news .day th:nth-child(1){width:110px}
@@ -317,7 +320,18 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
 <!-- 排行榜「近期新聞」分頁的內容（手寫，不會自動更新）。改完跑 算試看.py 再推上線。
      一天一張卡片（class="card pad day"），每張是 時間｜事件｜結果 三欄；比較會動到大盤的那一列加 class="key"。
      結果欄：已經發生的寫數字和判斷，偏多 <span class="bias up">、偏空 <span class="bias down">、持平 <span class="bias flat">；還沒發生寫 <span class="no">還沒發生</span>。 -->
-<div class="head"><div><h1>近期大事（到 12/15）</h1><p>整理日期 2026-11-25，結果更新到 11/25 15:00。時間都是台灣時間，日期大多是新聞和經濟行事曆上寫的，以官方公告為準。底色標起來的是比較會動到大盤的事；結果欄紅色是偏多、綠色是偏空（台股習慣）。三大法人那格看三個加起來的淨額：淨空減少 1,000 口以上算偏多、增加 1,000 口以上算偏空，其他算持平（投信多單大多是正 2 這類 ETF 的部位、外資空單多半是幫現貨避險，單看一邊會誤判；這個門檻是簡單訂的，沒有回測過）。</p></div></div>
+<div class="head"><div><h1>近期大事</h1><p>整理日期 2026-11-25，結果更新到 11/25 15:00。時間都是台灣時間，日期大多是新聞和經濟行事曆上寫的，以官方公告為準。底色標起來的是比較會動到大盤的事；結果欄紅色是偏多、綠色是偏空（台股習慣）。三大法人那格看三個加起來的淨額：淨空減少 1,000 口以上算偏多、增加 1,000 口以上算偏空，其他算持平（投信多單大多是正 2 這類 ETF 的部位、外資空單多半是幫現貨避險，單看一邊會誤判；這個門檻是簡單訂的，沒有回測過）。事件下面的「影響」是可能怎麼動到多空：有標「我們回測」的是用台指期歷史資料算的，其他是一般市場說法、沒有驗證過。</p></div></div>
+
+<div class="card pad anytime">
+  <h2>⚡ 隨時可能出來的（沒有固定日期）</h2>
+  <ol>
+    <li><b>川普新關稅（301 條）</b>：美國對 16 個經濟體的「產能過剩」調查，<b>台灣在名單裡</b>，報導說最快這週公布，稅率還沒出來（歐盟、日韓可能 15% 以下，會疊加在現有關稅上）。<div class="hint">影響：公布當下偏空，稅率比 15% 高、或台灣被單獨點名更偏空；如果稅率不高、或給豁免，可能利空出盡。</div></li>
+    <li><b>美國對半導體另一輪關稅</b>：報導說在研議，川普說兩年後晶片關稅上看 200%。<div class="hint">影響：對台積電、電子權值股是直接利空，台指期跟著跌的機會大。</div></li>
+    <li><b>國發會 10 月景氣燈號</b>：通常月底前後公布（去年是 11/27），9 月是 41 分紅燈。<div class="hint">影響：通常不大，市場已經從出口、營收數字猜得到。</div></li>
+    <li><b>限空令解除或調整、國安基金退場</b>：金管會隨時可能宣布。<div class="hint">影響：限空令解除＝放空變容易，偏空；國安基金退場也偏空。我們的「限空令做多」「國安基金進場做多」研究跟這個有關。</div></li>
+    <li><b>川普的發文或受訪</b>。</li>
+  </ol>
+</div>
 
 <div class="wk">這週</div>
 
@@ -328,7 +342,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
     <tbody>
       <tr><td class="t">13:45</td><td>台指期日盤收盤，結算價決定隔天的漲跌停和要不要追繳</td><td class="r"><span class="bias down">偏空</span>收 38,062，跌 2,262 點（−5.6%），結算價 38,123。盤中最低 36,500，收盤前拉回約 1,560 點。加權指數收 38,195（−4.8%）。</td></tr>
       <tr><td class="t">15:00 左右</td><td>期交所公布三大法人台指期未平倉：外資淨空、投信淨多，看三個加起來的淨額有沒有變</td><td class="r"><span class="bias flat">持平</span>外資淨空 105,709 口（+2,527），投信淨多 100,918 口（+2,904），自營商淨空 651 口。三大法人合計淨空 5,442 口，比前一天只多 41 口。</td></tr>
-      <tr class="key"><td class="t">21:30</td><td class="e">美國 10 月 PCE 通膨（核心預估月增 0.3%）、第三季 GDP、初領失業金、耐久財訂單</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr class="key"><td class="t">21:30</td><td class="e">美國 10 月 PCE 通膨（核心預估月增 0.3%）、第三季 GDP、初領失業金、耐久財訂單<div class="hint">影響：PCE 比預期熱 → 市場開始押 12 月升 2 碼 → 今晚美股、明早台指期偏空；符合或偏冷 → 只升 1 碼的把握更高，偏多。它會先反應一部分 12/10 的升息，但不會全部反應完（見下面 12/10）。</div></td><td class="r"><span class="no">還沒發生</span></td></tr>
     </tbody>
   </table></div>
 </div>
@@ -339,7 +353,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
     <thead><tr><th>時間</th><th>事件</th><th>結果</th></tr></thead>
     <tbody>
       <tr><td class="t">凌晨 3:00</td><td>聯準會褐皮書</td><td class="r"><span class="no">還沒發生</span></td></tr>
-      <tr><td class="t">全天</td><td>美國感恩節，美股休市（台股、台指期照常）</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="t">全天</td><td>美國感恩節，美股休市（台股、台指期照常）<div class="hint">看板：那晚沒有費半收盤，L194、L204、S49、疊11_W2 這些看美股的策略，11/27 早上會一直顯示「還不知道」。</div></td><td class="r"><span class="no">還沒發生</span></td></tr>
     </tbody>
   </table></div>
 </div>
@@ -359,7 +373,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
   <div class="scroll"><table>
     <thead><tr><th>時間</th><th>事件</th><th>結果</th></tr></thead>
     <tbody>
-      <tr class="key"><td class="t">全天</td><td class="e">台灣九合一地方選舉，加上核電公投</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr class="key"><td class="t">全天</td><td class="e">台灣九合一地方選舉，加上核電公投<div class="hint">影響：結果出乎意料（例如執政黨大敗）時，選後第一個交易日波動會比較大。我們的「選舉前後研究」有算過歷次選舉前後的走勢。</div></td><td class="r"><span class="no">還沒發生</span></td></tr>
     </tbody>
   </table></div>
 </div>
@@ -424,7 +438,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
   <div class="scroll"><table>
     <thead><tr><th>時間</th><th>事件</th><th>結果</th></tr></thead>
     <tbody>
-      <tr class="key"><td class="t">凌晨 3:00</td><td class="e">聯準會利率決議，3:30 記者會（市場估升 1 碼約 95%）</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr class="key"><td class="t">凌晨 3:00</td><td class="e">聯準會利率決議，3:30 記者會（市場估升 1 碼約 95%）<div class="hint">影響（我們回測，2008 起）：升 1 碼的 15 次，公布後隔天台指期平均 <b>+0.51%、73% 會漲</b>（利空出盡），但之後 5 天平均 −0.19%、只有 40% 漲；升 2 碼以上的 6 次，隔天平均 −0.29%、<b>之後 5 天平均 −2.27%、6 次只漲 1 次</b>。真正會動的是點陣圖（明年還升幾次）和記者會語氣。詳見最下面「Fed 決議後台指期怎麼走」。</div></td><td class="r"><span class="no">還沒發生</span></td></tr>
       <tr><td class="t">清晨</td><td>博通財報</td><td class="r"><span class="no">還沒發生</span></td></tr>
       <tr><td class="t">前後幾天</td><td>台積電 11 月營收</td><td class="r"><span class="no">還沒發生</span></td></tr>
       <tr><td class="t">21:30</td><td>美國 11 月 CPI（剛好在利率決議之後）</td><td class="r"><span class="no">還沒發生</span></td></tr>
@@ -443,26 +457,48 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
   </table></div>
 </div>
 
-<div class="wk">其他</div>
+<div class="wk">12/15 之後到明年 1 月</div>
 
-<div class="card pad">
-  <h2>沒有固定日期、隨時可能出來的</h2>
-  <ol>
-    <li><b>關稅調查結果</b>：美國對 16 個經濟體的「產能過剩」301 調查，台灣在名單裡，報導說最快這週公布，時間可能會改。</li>
-    <li><b>美國對半導體另一輪關稅</b>：報導說在研議。川普說兩年後晶片關稅上看 200%。</li>
-    <li><b>國發會 10 月景氣燈號</b>：通常月底前後公布（去年是 11/27）。9 月是 41 分紅燈。</li>
-    <li><b>限空令解除或調整、國安基金退場</b>：金管會隨時可能宣布。</li>
-    <li><b>川普的發文或受訪</b>。</li>
-  </ol>
+<div class="card pad day">
+  <h2>12/15 之後</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>時間</th><th>事件</th><th>結果</th></tr></thead>
+    <tbody>
+      <tr><td class="t">12/15（二）21:30</td><td>美國 PPI</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr class="key"><td class="t">12/16（三）13:30</td><td class="e">台指期 12 月合約結算<div class="hint">看板：L220（結算日前後空手）結算前兩天到結算後一天空手；結算週常有大戶換倉，波動比較大。</div></td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr class="key"><td class="t">12/17（四）下午</td><td class="e">台灣央行理監事會，市場預期可能升半碼<div class="hint">影響：台灣利率本來就低，升半碼對企業、房貸影響小；主要是縮小台美利差、讓外資少匯出、台幣止貶。大家都預期了，宣布時通常反應不大；不升反而可能讓台幣更弱、外資再賣。</div></td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr class="key"><td class="t">12/17～18</td><td class="e">日本央行開會，預期從 1.25% 升到 1.5%<div class="hint">影響：日本升息會讓日圓變強，借日圓買股票的錢可能撤出，以前（2024-08）出現過全球股市一起急跌。已經預期了，要看會不會暗示繼續升。</div></td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="t">12/25（五）</td><td>美股聖誕節休市<div class="hint">看板：那晚沒有費半收盤，看美股的策略隔天早上會顯示「還不知道」。</div></td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="t">12/31、1/1</td><td>台股年底最後一個交易日、元旦休市</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="t">1/8（五）21:30</td><td>美國 12 月非農就業</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="t">1/13（三）21:30</td><td>美國 12 月 CPI</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr class="key"><td class="t">1 月中（未確認）</td><td class="e">台積電法說會<div class="hint">影響：對台股影響很大，資本支出和明年展望決定電子股方向。</div></td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="t">1/20（三）</td><td>台指期 1 月合約結算</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="t">1 月底（未確認）</td><td>聯準會 1 月會議，市場預期 2027 年還會再升 1～2 次</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="t">2 月初（未確認）</td><td>農曆春節封關（2027 年的日期還沒公告）</td><td class="r"><span class="no">還沒發生</span></td></tr>
+    </tbody>
+  </table></div>
 </div>
 
 <div class="card pad">
-  <h2>12/15 之後</h2>
-  <ul>
-    <li>12/15（二）21:30：美國 PPI</li>
-    <li>12/16（三）：台指期 12 月合約結算</li>
-    <li>12/18（五）：日本央行開會，市場預期會升息</li>
-  </ul>
+  <h2>Fed 決議後台指期怎麼走（我們回測）</h2>
+  <p class="note" style="margin-top:0">Fed 決議是台灣清晨 02:00～03:00 公布，落在台指期夜盤裡。「決議前 5 天」＝決議日台灣收盤為止的 5 個交易日；「公布後隔天」＝決議日收盤到下一個交易日收盤；「之後 5 天」＝再往後 5 個交易日。2008-01～2026-10，大台近月連續。</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Fed 做什麼</th><th>次數</th><th>決議前 5 天</th><th>公布後隔天</th><th>之後 5 天</th></tr></thead>
+    <tbody>
+      <tr class="key"><td class="e">升 1 碼</td><td>15</td><td>+0.41%（60% 漲）</td><td><b>+0.51%（73% 漲）</b></td><td>−0.19%（40% 漲）</td></tr>
+      <tr><td>升 2 碼以上</td><td>6</td><td>−0.11%（50% 漲）</td><td>−0.29%（33% 漲）</td><td><b>−2.27%（17% 漲）</b></td></tr>
+      <tr><td>降息</td><td>14</td><td>+0.57%（71% 漲）</td><td>+0.71%（57% 漲）</td><td>+0.29%（43% 漲）</td></tr>
+      <tr><td>不動（2020 起）</td><td>35</td><td>+0.85%（63% 漲）</td><td>+0.23%（60% 漲）</td><td>+0.41%（60% 漲）</td></tr>
+      <tr><td>臨時會議（2008、2020 危機）</td><td>6</td><td>−7.87%（0% 漲）</td><td>−0.48%（33% 漲）</td><td>+0.15%（50% 漲）</td></tr>
+      <tr><td>對照：隨便一天／隨便 5 天</td><td></td><td>+0.31%</td><td>+0.06%</td><td>+0.31%</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">次數很少（升 2 碼以上只有 2022 年那 6 次），只能當參考。升息、降息每一次都有算；「不動」的會議 2009～2019 年的日期沒收齊，只看 2020 起。程式和每一次的明細在 <code>StockClaudeWork/Fed決議前後研究</code>。</p>
+</div>
+
+<div class="card pad">
+  <h2>附註</h2>
   <p class="note">這裡只是整理行事曆和新聞，不是投資建議。</p>
   <details>
     <summary>資料來源</summary>
