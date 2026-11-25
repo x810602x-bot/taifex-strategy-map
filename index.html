@@ -282,7 +282,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
 <!-- 排行榜「近期新聞」分頁的內容（手寫，不會自動更新）。改完跑 算試看.py 再推上線。
      一天一張卡片（class="card pad day"），每張是 時間｜事件｜結果 三欄；比較會動到大盤的那一列加 class="key"。
      結果欄：已經發生的寫數字和判斷，偏多 <span class="bias up">、偏空 <span class="bias down">、持平 <span class="bias flat">；還沒發生寫 <span class="no">還沒發生</span>。 -->
-<div class="head"><div><h1>近期大事</h1><p>整理日期 2026-11-25，結果更新到 11/25 15:00。時間都是台灣時間，日期大多是新聞和經濟行事曆上寫的，以官方公告為準。底色標起來的是比較會動到大盤的事；結果欄紅色是偏多、綠色是偏空（台股習慣）。三大法人那格看三個加起來的淨額：淨空減少 1,000 口以上算偏多、增加 1,000 口以上算偏空，其他算持平（投信多單大多是正 2 這類 ETF 的部位、外資空單多半是幫現貨避險，單看一邊會誤判；這個門檻是簡單訂的，沒有回測過）。事件下面的「影響」是可能怎麼動到多空：有標「我們回測」的是用台指期歷史資料算的，其他是一般市場說法、沒有驗證過。</p></div></div>
+<div class="head"><div><h1>近期大事</h1><p>整理日期 2026-11-25，結果更新到 11/25 21:30。時間都是台灣時間，日期大多是新聞和經濟行事曆上寫的，以官方公告為準。底色標起來的是比較會動到大盤的事；結果欄紅色是偏多、綠色是偏空（台股習慣）。三大法人那格看三個加起來的淨額：淨空減少 1,000 口以上算偏多、增加 1,000 口以上算偏空，其他算持平（投信多單大多是正 2 這類 ETF 的部位、外資空單多半是幫現貨避險，單看一邊會誤判；這個門檻是簡單訂的，沒有回測過）。事件下面的「影響」是可能怎麼動到多空：有標「我們回測」的是用台指期歷史資料算的，其他是一般市場說法、沒有驗證過。</p></div></div>
 
 <div class="card pad anytime">
   <h2>⚡ 隨時可能出來的（沒有固定日期）</h2>
@@ -304,7 +304,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
     <tbody>
       <tr><td class="t">13:45</td><td>台指期日盤收盤，結算價決定隔天的漲跌停和要不要追繳</td><td class="r"><span class="bias down">偏空</span>收 38,062，跌 2,262 點（−5.6%），結算價 38,123。盤中最低 36,500，收盤前拉回約 1,560 點。加權指數收 38,195（−4.8%）。</td></tr>
       <tr><td class="t">15:00 左右</td><td>期交所公布三大法人台指期未平倉：外資淨空、投信淨多，看三個加起來的淨額有沒有變</td><td class="r"><span class="bias flat">持平</span>外資淨空 105,709 口（+2,527），投信淨多 100,918 口（+2,904），自營商淨空 651 口。三大法人合計淨空 5,442 口，比前一天只多 41 口。</td></tr>
-      <tr class="key"><td class="t">21:30</td><td class="e">美國 10 月 PCE 通膨（核心預估月增 0.3%）、第三季 GDP、初領失業金、耐久財訂單<div class="hint">影響：PCE 比預期熱 → 市場開始押 12 月升 2 碼 → 今晚美股、明早台指期偏空；符合或偏冷 → 只升 1 碼的把握更高，偏多。它會先反應一部分 12/10 的升息，但不會全部反應完（見下面 12/10）。</div></td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr class="key"><td class="t">21:30</td><td class="e">美國 10 月 PCE 通膨（核心預估月增 0.3%）、第三季 GDP、初領失業金、耐久財訂單<div class="hint">影響：PCE 比預期熱 → 市場開始押 12 月升 2 碼 → 今晚美股、明早台指期偏空；符合或偏冷 → 只升 1 碼的把握更高，偏多。它會先反應一部分 12/10 的升息，但不會全部反應完（見下面 12/10）。</div></td><td class="r"><span class="bias down">偏空</span>核心 PCE 年增 3.3%，比預期 3.2% 熱（上個月 3.1%），月增 0.3% 符合預期；整體 PCE 年增 3.8% 符合預期。第三季 GDP 從 3.4% 上修到 4.3%，初領失業金 18.9 萬人（預期 20 萬），耐久財訂單月增 0.2%（不含運輸 0.5%）。經濟和通膨都偏熱，12 月升息更確定。</td></tr>
     </tbody>
   </table></div>
 </div>
@@ -448,6 +448,10 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
       <li><a href="https://www.federalreserve.gov/newsevents/2026-december.htm" target="_blank" rel="noopener">聯準會：2026 年 12 月行事曆</a></li>
       <li><a href="https://fedratecalc.com/us-economic-calendar/december-2026/" target="_blank" rel="noopener">FedRateCalc：2026 年 12 月美國經濟行事曆</a></li>
       <li><a href="https://www.investing.com/news/stock-market-news/gdp-jobless-claims-and-pce-among-key-data-due-wednesday-93CH-5048884" target="_blank" rel="noopener">Investing.com：11/25 GDP、初領失業金、PCE</a></li>
+      <li><a href="https://www.bea.gov/news/2026/personal-income-and-outlays-october-2026" target="_blank" rel="noopener">美國經濟分析局：10 月個人所得與支出（PCE 結果）</a></li>
+      <li><a href="https://www.bea.gov/news/2026/gdp-second-estimate-and-corporate-profits-3rd-quarter-2026" target="_blank" rel="noopener">美國經濟分析局：第三季 GDP 第二次估計</a></li>
+      <li><a href="https://www.census.gov/manufacturing/m3/adv/current/index.html" target="_blank" rel="noopener">美國普查局：10 月耐久財訂單</a></li>
+      <li><a href="https://panews.io/articles/01a212e6-cf2d-70fb-a468-f4775abb0864" target="_blank" rel="noopener">PANews：初領失業金 18.9 萬人</a></li>
       <li><a href="https://ustr.gov/about/policy-offices/press-office/press-releases/2026/march/ustr-initiates-section-301-investigations-relating-structural-excess-capacity-and-production" target="_blank" rel="noopener">美國貿易代表署：16 個經濟體產能過剩 301 調查</a></li>
       <li><a href="https://www.ctee.com.tw/news/20261124702053-430701" target="_blank" rel="noopener">工商時報：川普說兩年後晶片關稅上看 200%</a></li>
       <li><a href="https://uanalyze.com.tw/articles/7597359171" target="_blank" rel="noopener">優分析：MSCI 調升台股權重，11/30 盤後生效</a></li>
