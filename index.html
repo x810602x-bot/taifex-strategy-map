@@ -187,20 +187,7 @@ details.help li{margin:4px 0}
 .chartbox{position:relative;height:380px}
 .chartbox.small{height:230px}
 
-/* 計算機 */
-.calc{display:grid;grid-template-columns:340px 1fr;gap:16px;align-items:start}
-.form{display:grid;gap:12px}
-.form label{font-size:12.5px;color:var(--sub);font-weight:500;display:grid;gap:5px}
-.form input,.form select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--raise);font-size:15px;outline:0;font-variant-numeric:tabular-nums}
-.form input:focus,.form select:focus{border-color:var(--acc);background:var(--card)}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
-.box{padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:13px;color:var(--sub)}
-.box .k{font-size:12px;color:var(--faint);font-weight:500}
-.box b{display:block;font-size:22px;color:var(--ink);margin:2px 0}
-.box b.good{color:var(--good)}.box b.warn{color:var(--warn)}.box b.bad{color:var(--bad)}
 .good{color:var(--good)}.bad{color:var(--bad)}.warn{color:var(--warn)}
-.sec{font-size:13px;font-weight:700;margin:4px 0 0;color:var(--ink)}
 
 /* 底部比較列 */
 .tray{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:30;display:none;align-items:center;gap:14px;padding:9px 10px 9px 18px;border-radius:999px;background:var(--ink);color:var(--bg);box-shadow:0 8px 28px rgba(0,0,0,.25);font-size:14px;white-space:nowrap}
@@ -211,7 +198,6 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
 
 @media (max-width:900px){
   .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .calc{grid-template-columns:1fr}
   .top .in{gap:10px;padding:0 12px}
   .brand span,.top .chip{display:none}
   .tabs button{padding:0 10px;font-size:14px}
@@ -245,7 +231,6 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
   <nav class="tabs" id="tabs">
     <button data-v="rank">排行榜</button>
     <button data-v="chart">走勢比較<span class="cnt" id="tabCnt"></span></button>
-    <button data-v="calc">資金計算機</button>
     <button data-v="news">近期新聞</button>
   </nav>
   <div class="sp"></div>
@@ -313,42 +298,6 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
   <div class="card pad">
     <div class="ctitle"><b>從最高點跌下來多少</b><span>每個月最深的一天</span></div>
     <div class="chartbox small"><canvas id="cDD"></canvas></div>
-  </div>
-</section>
-
-<section class="view" id="v-calc">
-  <div class="head"><div><h1>資金計算機</h1><p>算放了幾倍、離追繳和斷頭還有多遠。保證金是 2026-11-10 的金額，暫定值。</p></div></div>
-  <div class="calc">
-    <div class="card pad form">
-      <div class="sec">部位</div>
-      <label>準備的資金（元）<input id="cash" type="number" value="2900000" step="10000"></label>
-      <div class="two">
-        <label>指數點數<input id="idx" type="number" value="43204" step="1"></label>
-        <label>方向<select id="dir2"><option value="1">做多</option><option value="-1">做空</option></select></label>
-      </div>
-      <div class="two">
-        <label>商品<select id="prod"><option value="200">大台 200 元/點</option><option value="50">小台 50 元/點</option><option value="10">微台 10 元/點</option></select></label>
-        <label>口數<input id="lots" type="number" value="1" min="0" step="1"></label>
-      </div>
-      <div class="sec">保證金（大台）</div>
-      <div class="two">
-        <label>原始保證金<input id="im" type="number" value="701000" step="1000"></label>
-        <label>維持保證金<input id="mm" type="number" value="538000" step="1000"></label>
-      </div>
-      <div class="sec">反過來算</div>
-      <label>想放幾倍<input id="wantK" type="number" value="1.4" step="0.1" min="0.1"></label>
-    </div>
-    <div>
-      <div class="res" id="calcOut"></div>
-      <details class="card help" open>
-        <summary>名詞說明</summary>
-        <ul>
-          <li>倍數 = 抱的合約總值 ÷ 你的資金。1 倍 = 一口的價值全部準備好；3 倍 = 只準備三分之一。</li>
-          <li>風險指標 = 帳戶的錢 ÷ 持有部位要的原始保證金。低於維持保證金會被<b>追繳</b>（要補錢）；風險指標低於 25% 期貨商會<b>代為沖銷</b>（俗稱斷頭）。</li>
-          <li>小台、微台的保證金照大台的 1/4、1/20 換算。這裡是「一次跌到底、中間沒補錢」的算法；台指期一天最多跌 10%。</li>
-        </ul>
-      </details>
-    </div>
   </div>
 </section>
 
@@ -598,7 +547,7 @@ function render() {
   if (!scen()) return go();                     // 這個條件的資料還沒下載
   const sc = scen(), ref = sc["列"].find(r => r["方向"] === "對照");
   document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "v-" + st.view));
-  $("cond").hidden = st.view === "calc" || st.view === "news";
+  $("cond").hidden = st.view === "news";
   $("side").hidden = st.view !== "rank";
   $("tabs").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === st.view));
   $("segStart").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === st.start));
@@ -770,33 +719,6 @@ function draw() {
   cDD = new Chart($("cDD"), { type: "line", data: { labels: months, datasets: ds("回落") },
     options: base({ max: 0, ticks: { callback: v => pct(v, 0) } }, c => `${c.dataset.label}：${c.parsed.y == null ? "—" : pct(c.parsed.y)}`) });
 }
-
-// ---------- 資金計算機 ----------
-function calc() {
-  const cash = +$("cash").value, idx = +$("idx").value, pv = +$("prod").value, lots = +$("lots").value;
-  const ratio = pv / 200, im = +$("im").value * ratio, mm = +$("mm").value * ratio;
-  const val = idx * pv * lots, k = cash > 0 ? val / cash : Infinity;
-  const needIM = im * lots, risk = needIM > 0 ? cash / needIM : Infinity;
-  const perPt = pv * lots;
-  const room = line => {
-    const loss = cash - line;
-    if (lots <= 0) return "<b>—</b>沒有部位";
-    if (loss <= 0) return `<b class="bad">已經低於這條線</b>`;
-    const pts = loss / perPt, p = pts / idx;
-    const cls = p < 0.05 ? "bad" : p < 0.15 ? "warn" : "good";
-    return `<b class="${cls} num">再${$("dir2").value === "-1" ? "漲" : "跌"} ${pct(p)}</b>約 ${fmt(pts)} 點、賠 ${fmt(loss)} 元`;
-  };
-  const big = lots * pv / 200, wk = +$("wantK").value;
-  $("calcOut").innerHTML = `
-    <div class="box"><div class="k">放了幾倍</div><b class="num ${k > 3 ? "bad" : k > 1.5 ? "warn" : "good"}">${isFinite(k) ? k.toFixed(2) + " 倍" : "—"}</b>合約總值 ÷ 資金</div>
-    <div class="box"><div class="k">合約總值</div><b class="num">${fmt(val)} 元</b>等於 ${big.toFixed(2)} 口大台</div>
-    <div class="box"><div class="k">開倉要的原始保證金</div><b class="num">${fmt(needIM)} 元</b>${cash >= needIM ? '<span class="good">資金夠</span>' : '<span class="bad">資金不夠開倉</span>'}，風險指標 ${isFinite(risk) ? pct(risk, 0) : "—"}</div>
-    <div class="box"><div class="k">離追繳（低於維持保證金 ${fmt(mm * lots)} 元）</div>${room(mm * lots)}</div>
-    <div class="box"><div class="k">離斷頭（風險指標低於 25%，剩 ${fmt(needIM * 0.25)} 元）</div>${room(needIM * 0.25)}</div>
-    <div class="box"><div class="k">反過來算：放 ${wk || "—"} 倍、抱 ${lots} 口</div><b class="num">${wk > 0 && lots > 0 ? fmt(val / wk) + " 元" : "—"}</b>要準備的資金</div>`;
-}
-["cash", "idx", "dir2", "prod", "lots", "im", "mm", "wantK"].forEach(id => $(id).addEventListener("input", calc));
-calc();
 
 go();
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
