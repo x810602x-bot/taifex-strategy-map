@@ -48,6 +48,23 @@ main{max-width:1180px;margin:0 auto;padding:22px 20px 90px}
 .head p{margin:3px 0 0;color:var(--sub);font-size:13px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
 .pad{padding:18px 20px}
+/* 近期新聞 */
+#v-news .card{margin-bottom:14px}
+#v-news h2{font-size:17px;margin:0 0 8px}
+#v-news .scroll{overflow-x:auto}
+#v-news table{width:100%;border-collapse:collapse;font-size:14.5px}
+#v-news th{font-size:13px;color:var(--faint);font-weight:500;text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap;position:static;background:none;cursor:default}
+#v-news td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left;white-space:normal}
+#v-news tbody tr:hover{background:none}
+#v-news td.d{white-space:nowrap;font-weight:700}
+#v-news td.t{white-space:nowrap;color:var(--sub)}
+#v-news tr.key td{background:var(--acc-soft)}
+#v-news tr.key td.e{font-weight:700}
+#v-news ol,#v-news ul{margin:0;padding-left:22px}
+#v-news li{margin:5px 0}
+#v-news a{color:var(--acc)}
+#v-news details summary{cursor:pointer;color:var(--acc);font-size:13.5px;margin-top:10px}
+#v-news .note{color:var(--sub);font-size:13.5px;margin:10px 0 0}
 
 /* 多空切換 */
 .side{display:inline-grid;grid-template-columns:repeat(3,1fr);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;box-shadow:var(--shadow)}
@@ -194,6 +211,9 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
   .tabs button{padding:0 10px;font-size:14px}
 }
 @media (max-width:640px){
+  .top .in{gap:6px}
+  .tabs{margin-left:0}
+  .tabs button{padding:0 6px;font-size:13.5px}
   main{padding:16px 12px 90px}
   .hide-s{display:none}
   .dt .only-s{display:block}
@@ -220,6 +240,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
     <button data-v="rank">排行榜</button>
     <button data-v="chart">走勢比較<span class="cnt" id="tabCnt"></span></button>
     <button data-v="calc">資金計算機</button>
+    <button data-v="news">近期新聞</button>
   </nav>
   <div class="sp"></div>
   <span class="chip">資料到 <span id="dataEnd"></span> 日盤收盤</span>
@@ -323,6 +344,96 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
       </details>
     </div>
   </div>
+</section>
+
+<!-- 近期新聞：內容在 近期新聞.html，算試看.py 放進來 -->
+<section class="view" id="v-news">
+<!-- 排行榜「近期新聞」分頁的內容（手寫，不會自動更新）。改完跑 算試看.py 再推上線。 -->
+<div class="head"><div><h1>近期大事（到 12/15）</h1><p>整理日期 2026-11-25。時間都是台灣時間，日期大多是新聞和經濟行事曆上寫的，以官方公告為準。底色標起來的是比較會動到大盤的事。</p></div></div>
+
+<div class="card pad">
+  <h2>這週</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>日期</th><th>時間</th><th>事件</th></tr></thead>
+    <tbody>
+      <tr><td class="d">11/25（三）</td><td class="t">13:45</td><td>台指期日盤收盤，結算價決定隔天的漲跌停和要不要追繳</td></tr>
+      <tr><td class="d"></td><td class="t">15:00 左右</td><td>期交所公布三大法人，看外資台指期淨空單（11/24 約 10.3 萬口）有沒有變</td></tr>
+      <tr class="key"><td class="d"></td><td class="t">21:30</td><td class="e">美國 10 月 PCE 通膨（核心預估月增 0.3%）、第三季 GDP、初領失業金、耐久財訂單</td></tr>
+      <tr><td class="d">11/26（四）</td><td class="t">凌晨 3:00</td><td>聯準會褐皮書</td></tr>
+      <tr><td class="d"></td><td class="t">全天</td><td>美國感恩節，美股休市（台股、台指期照常）</td></tr>
+      <tr><td class="d">11/27（五）</td><td class="t"></td><td>美股只開半天（台灣週六凌晨 2:00 收盤），黑色星期五</td></tr>
+      <tr class="key"><td class="d">11/28（六）</td><td class="t"></td><td class="e">台灣九合一地方選舉，加上核電公投</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="card pad">
+  <h2>下週</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>日期</th><th>時間</th><th>事件</th></tr></thead>
+    <tbody>
+      <tr><td class="d">11/30（一）</td><td class="t"></td><td>選後第一個交易日；MSCI 調高台股權重，收盤生效</td></tr>
+      <tr><td class="d">12/1（二）</td><td class="t">23:00</td><td>美國職缺數據</td></tr>
+      <tr class="key"><td class="d">12/2（三）</td><td class="t">凌晨</td><td class="e">黃仁勳到美國眾議院三個委員會閉門作證</td></tr>
+      <tr class="key"><td class="d">12/4（五）</td><td class="t"></td><td class="e">輝達延後的季報（10-Q）截止日，最多可以再延 5 天</td></tr>
+      <tr><td class="d"></td><td class="t">21:30</td><td>美國 11 月非農就業（聯準會開會前最後一份就業報告）</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="card pad">
+  <h2>第三週</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>日期</th><th>時間</th><th>事件</th></tr></thead>
+    <tbody>
+      <tr><td class="d">12/7～12/9 前後</td><td class="t"></td><td>台灣 11 月出口</td></tr>
+      <tr class="key"><td class="d">12/10（四）</td><td class="t">凌晨 3:00</td><td class="e">聯準會利率決議，3:30 記者會（市場估升 1 碼約 95%）</td></tr>
+      <tr><td class="d"></td><td class="t">清晨</td><td>博通財報</td></tr>
+      <tr><td class="d"></td><td class="t">21:30</td><td>美國 11 月 CPI（剛好在利率決議之後）</td></tr>
+      <tr><td class="d">12/10 前後</td><td class="t"></td><td>台積電 11 月營收</td></tr>
+      <tr><td class="d">12/15（二）</td><td class="t">清晨</td><td>Oracle 財報（只有一個網站寫這天，還沒確認）</td></tr>
+      <tr><td class="d"></td><td class="t">08:45</td><td>L317（11/16 加權大跌那次）抱滿 20 天的賣出日</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="card pad">
+  <h2>沒有固定日期、隨時可能出來的</h2>
+  <ol>
+    <li><b>關稅調查結果</b>：美國對 16 個經濟體的「產能過剩」301 調查，台灣在名單裡，報導說最快這週公布，時間可能會改。</li>
+    <li><b>美國對半導體另一輪關稅</b>：報導說在研議。川普說兩年後晶片關稅上看 200%。</li>
+    <li><b>國發會 10 月景氣燈號</b>：通常月底前後公布（去年是 11/27）。9 月是 41 分紅燈。</li>
+    <li><b>限空令解除或調整、國安基金退場</b>：金管會隨時可能宣布。</li>
+    <li><b>川普的發文或受訪</b>。</li>
+  </ol>
+</div>
+
+<div class="card pad">
+  <h2>12/15 之後</h2>
+  <ul>
+    <li>12/15（二）21:30：美國 PPI</li>
+    <li>12/16（三）：台指期 12 月合約結算</li>
+    <li>12/18（五）：日本央行開會，市場預期會升息</li>
+  </ul>
+  <p class="note">這裡只是整理行事曆和新聞，不是投資建議。</p>
+  <details>
+    <summary>資料來源</summary>
+    <ul>
+      <li><a href="https://www.federalreserve.gov/newsevents/2026-december.htm" target="_blank" rel="noopener">聯準會：2026 年 12 月行事曆</a></li>
+      <li><a href="https://fedratecalc.com/us-economic-calendar/december-2026/" target="_blank" rel="noopener">FedRateCalc：2026 年 12 月美國經濟行事曆</a></li>
+      <li><a href="https://www.investing.com/news/stock-market-news/gdp-jobless-claims-and-pce-among-key-data-due-wednesday-93CH-5048884" target="_blank" rel="noopener">Investing.com：11/25 GDP、初領失業金、PCE</a></li>
+      <li><a href="https://ustr.gov/about/policy-offices/press-office/press-releases/2026/march/ustr-initiates-section-301-investigations-relating-structural-excess-capacity-and-production" target="_blank" rel="noopener">美國貿易代表署：16 個經濟體產能過剩 301 調查</a></li>
+      <li><a href="https://www.ctee.com.tw/news/20261124702053-430701" target="_blank" rel="noopener">工商時報：川普說兩年後晶片關稅上看 200%</a></li>
+      <li><a href="https://uanalyze.com.tw/articles/7597359171" target="_blank" rel="noopener">優分析：MSCI 調升台股權重，11/30 盤後生效</a></li>
+      <li><a href="https://cna.com.tw/news/aipl/202608200078.aspx" target="_blank" rel="noopener">中央社：九合一大選 11/28 投票</a></li>
+      <li><a href="https://www.aljazeera.com/news/2026/11/21/trump-calls-for-nvidia-to-reinstate-brilliant-jensen-huang" target="_blank" rel="noopener">Al Jazeera：黃仁勳 12/1 到眾議院作證</a></li>
+      <li><a href="https://www.nacionale.com/en/articles/when-will-nvidia-file-10-q-december-4-deadline-what-happens-if-late-nasdaq" target="_blank" rel="noopener">Nacionale：輝達季報 12/4 截止</a></li>
+      <li><a href="https://www.earningswhispers.com/stocks/AVGO" target="_blank" rel="noopener">Earnings Whispers：博通財報 12/9（美國時間）</a></li>
+      <li><a href="https://finance.technews.tw/2025/11/27/october-economic-indicator/" target="_blank" rel="noopener">科技新報：去年 10 月景氣燈號 11/27 公布</a></li>
+    </ul>
+  </details>
+</div>
+
 </section>
 </main>
 <footer>2026-11 夜間研究的回測結果。全部是回測數字，不是投資建議。</footer>
@@ -478,7 +589,7 @@ function render() {
   if (!scen()) return go();                     // 這個條件的資料還沒下載
   const sc = scen(), ref = sc["列"].find(r => r["方向"] === "對照");
   document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "v-" + st.view));
-  $("cond").hidden = st.view === "calc";
+  $("cond").hidden = st.view === "calc" || st.view === "news";
   $("side").hidden = st.view !== "rank";
   $("tabs").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === st.view));
   $("segStart").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === st.start));
