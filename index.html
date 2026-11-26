@@ -71,14 +71,6 @@ main{max-width:1180px;margin:0 auto;padding:22px 20px 90px}
 #v-news .bias.down{color:#1f9d5c;background:rgba(31,157,92,.14)}
 #v-news .bias.flat{color:var(--sub);background:var(--raise)}
 
-/* 多空切換 */
-.side{display:inline-grid;grid-template-columns:repeat(3,1fr);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;box-shadow:var(--shadow)}
-.side button{border:0;background:none;border-radius:9px;padding:8px 22px;cursor:pointer;font-weight:700;color:var(--sub);display:flex;align-items:center;gap:8px;white-space:nowrap}
-.side button small{font-weight:500;font-size:12px;opacity:.8}
-.side button[data-v="多"].on{background:var(--long-soft);color:var(--long)}
-.side button[data-v="空"].on{background:var(--short-soft);color:var(--short)}
-.side button[data-v="雙向"].on{background:rgba(124,139,255,.18);color:#7c8bff}
-
 /* 條件列 */
 .filters{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:start;margin-bottom:14px}
 .f{min-width:0;max-width:100%}
@@ -203,8 +195,6 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
   tr.more td{padding:4px 12px 14px}
   .tagbar{padding:10px 12px}
   .tagbar .grp{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
-  .side{display:grid;width:100%}
-  .side button{justify-content:center;padding:8px 10px}
   .search,.search input{width:100%}
   .kpi .v{font-size:21px}
 }
@@ -233,7 +223,6 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
 <div id="cond">
   <div class="head">
     <div><h1 id="title"></h1><p id="subtitle"></p><button class="helpbtn" id="helpBtn">？ 欄位和標籤是什麼意思</button></div>
-    <div class="side" id="side"></div>
   </div>
   <div class="filters">
     <div class="f capf"><label>起算年份：<b id="startVal"></b></label><input type="range" id="startRange" min="0" step="1" aria-label="起算年份"><div class="marks" id="startMarks"></div></div>
@@ -262,7 +251,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
       <li>每類只留這個條件下一年平均賺最多的那支，其他的點名稱下面「同類還有」打開看，會列出每支在這個條件下的一年賺幾 % 和勝率。換起算年份或放大規則，留下的那支可能換人。搜尋框打同類裡任何一支的編號或名稱，會把那支單獨列出來，標「同類・○○ 代表」。</li>
       <li>「放幾倍」＝1 口的合約價值 ÷ 你帳戶裡放的錢（不是保證金的幾倍）。帳戶要放的錢＝（指數 × 每點多少錢）÷ 放幾倍，大台每點 200 元、小台 50 元、微台 10 元；滑鼠移到每一列的倍數上會直接算給你看，指數用資料裡最新一天的日盤收盤。這個倍數是在選的期間裡重新找的；「年化報酬率（複利）」是照那個倍數算的，賺的錢會滾進去一起算；單支報表裡的「單利年報酬率」是每次都做固定口數、賺的不滾進去，所以兩邊數字不一樣。「每筆賺」（平均每筆交易賺幾 %）、「每天賺」（有部位的日子平均一天賺幾 %）都是不放大的；想看不放大一年賺多少，把放大規則拉到 0。</li>
       <li>每支名稱下面那行是<b>怎麼做</b>：什麼時候進場、什麼時候出場（日盤開盤 08:45、夜盤開盤 15:00）、平均抱幾個交易日、一年大約進場幾次。會加碼的（平常抱 1 口、訊號出現多抱 1 口）講的是加碼那一口。點一下那一列可以展開看更多。</li>
-      <li>標籤一律放在名稱下面那一排，順序是長期、單日、看什麼、怎麼做。藍色是<b>看什麼資料</b>決定進出（照策略名稱分），灰色是<b>怎麼做</b>（只抱白天、只抱夜盤、要做夜盤、會加碼、抱很久＝平均 20 天以上、短進短出＝平均 2 天以內、常進出＝一年進出 40 次以上、很少進出＝一年不到 2 次）。點上面的標籤可以篩選：點一下＝只看有這個標籤的（選好幾個就是全部都要有），再點一下變成紅色刪除線＝不看有這個標籤的，點第三下取消。「筆數少」是全部期間不到 20 筆，數字不太能信。</li>
+      <li>標籤一律放在名稱下面那一排，順序是方向、長期、單日、看什麼、怎麼做。藍色是<b>看什麼資料</b>決定進出（照策略名稱分），灰色是<b>怎麼做</b>（只抱白天、只抱夜盤、要做夜盤、會加碼、抱很久＝平均 20 天以上、短進短出＝平均 2 天以內、常進出＝一年進出 40 次以上、很少進出＝一年不到 2 次）。點上面的標籤可以篩選：點一下＝只看有這個標籤的（選好幾個就是全部都要有），再點一下變成紅色刪除線＝不看有這個標籤的，點第三下取消。「筆數少」是全部期間不到 20 筆，數字不太能信。</li>
       <li>倍數一律照<b>不被追繳</b>算：照實際的做法——口數固定、中途不補錢也不減碼，而且假設剛好在最高點進場——帳戶也不會跌破維持保證金；照規則的倍數做不到的，會壓低並標「壓低倍數」。維持保證金用 2026-11-10 的比例；大跌時期交所常調高保證金，實際風險會更高。</li>
       <li>「夏普」看報酬穩不穩（平均報酬 ÷ 上下波動），1 以上算不錯，跟放幾倍無關。</li>
       <li>「勝率」是每筆交易裡賺錢那幾筆的比例；「賺賠比」是賺錢那幾筆平均賺的 ÷ 賠錢那幾筆平均賠的。勝率低但賺賠比高，一樣能賺。有自己交易紀錄的照紀錄算（加碼策略算加碼那幾筆）；沒有的把連續有部位的那幾天算一筆，只做白天或只做夜盤的每天算一筆。只算起算日以後進場的。</li>
@@ -272,7 +261,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
       <li>倍數最多只能放到原始保證金允許的上限（約 12 倍），碰到的會標「到上限」。</li>
       <li>「起算年份」也是一條拉桿，一年一格，從那年 1 月起算；拉桿下面標出來的三年從特別的日子起算：1999 從 10 月（大部分策略從這時候開始有資料）、2008 從 8 月（從這時候起全部策略都有資料）、2017 從 5 月（夜盤開始）。</li>
       <li>起算越晚、沒經過大跌，能放的倍數越大、年化越誇張。1999、2000 起算經過 2000 和 2008 兩次大跌，最接近最壞情況；2009 以後起算就沒經過 2008 那次。</li>
-      <li>「做多」只做多（標「會加碼」的最多抱到 2 口）；「做空」只放空；「雙向」是多單、空單都會做的，通常是平常做多、危險的日子改放空。分類是照每支的交易明細判的。</li>
+      <li>做多、做空、雙向排在同一個榜，名稱下面第一個標籤就是方向；點上面「方向」那排可以只看其中一種，點兩下＝不看那種。「做多」只做多（標「會加碼」的最多抱到 2 口）；「做空」只放空；「雙向」是多單、空單都會做的，通常是平常做多、危險的日子改放空。分類是照每支的交易明細判的。</li>
       <li>做空大多是「只空白天」，夜盤資料 2017 年 5 月才有，所以起算年份在 2017 以前的做空名單很短。</li>
       <li>做空策略有部位的時間很短、每筆很薄，單獨做的年化都不高；放大後的數字是用過去最深那次回落換算的，筆數少的不能當真。</li>
       <li>所有策略都是事後挑的，實際做通常會比表上差。全部是回測數字，不是投資建議。</li>
@@ -503,11 +492,10 @@ const FLOOR_NOTE = "倍數一律壓在「口數固定、中途不補錢、剛好
 const CAP_NOTE = c => c === "1倍" ? "每支都抱 1 口、準備一口大台的全部價值，不放大。" :
   c === "不限" ? "不被追繳的前提下放到最大。回落還是很深，只當參考。" :
   `每支放到「最大回落剛好 −${c.slice(1, -1)}%」的倍數。${+c.slice(1, -1) <= 40 ? "不放大時回落就比這深的，倍數會小於 1（每口要準備比一口價值更多的錢）。" : ""}`;
-const SIDE_NAME = { "多": "做多", "空": "做空", "雙向": "雙向" };
 const BH = "買進持有";
-const st = { view: location.hash === "#news" ? "news" : "rank", side: "多", start: "1999-10", cap: "-50%", q: "", sort: "年化", dir: -1, tags: new Set(), no: new Set(), open: new Set() };   // 從報表點「近期新聞」過來會帶 #news
+const st = { view: location.hash === "#news" ? "news" : "rank", start: "1999-10", cap: "-50%", q: "", sort: "年化", dir: -1, tags: new Set(), no: new Set(), open: new Set() };   // 從報表點「近期新聞」過來會帶 #news
 // 記住上次看的條件（只存在這台裝置的瀏覽器）
-const SAVE = ["side", "start", "cap", "sort", "dir"];
+const SAVE = ["start", "cap", "sort", "dir"];
 try { const s = JSON.parse(localStorage.getItem("v2st") || "{}"); SAVE.forEach(k => { if (s[k] != null) st[k] = s[k]; }); } catch (e) {}
 if (!STARTS.some(x => x[0] === st.start) || !CAPS.some(x => x[0] === st.cap)) Object.assign(st, { start: "1999-10", cap: "-50%" });
 const save = () => { try { localStorage.setItem("v2st", JSON.stringify(Object.fromEntries(SAVE.map(k => [k, st[k]])))); } catch (e) {} };
@@ -529,6 +517,8 @@ const TAG_LOOK = { "美股": "看美國股市的漲跌決定進出。", "亞太�
   "類股個股": "看台積電、電子、金融這類個股類股決定進出。", "基本面": "看營收、景氣、利率這類數字決定進出。", "新聞事件": "看新聞、大事件決定進出。", "日曆": "看日期（週幾、月底、結算日、長假）決定進出。" };
 const TAG_DO = { "只抱白天": "日盤開盤（08:45）進場，當天夜盤開盤（15:00）出場。", "只抱夜盤": "夜盤開盤（15:00）進場，隔天日盤開盤（08:45）出場。", "要做夜盤": "有在夜盤開盤（15:00）進場或出場，要能下夜盤單。",
   "會加碼": "訊號出現時會多抱 1 口。", "抱很久": "一筆平均抱 20 個交易日以上。", "短進短出": "一筆平均抱 2 個交易日以內。", "常進出": "一年進出 40 次以上。", "很少進出": "一年進出不到 2 次。" };
+// 方向：資料裡是 多／空／雙向（排行榜每一列的「方向」、報表的 x.side）→ [標籤上的字, 說明]
+const TAG_SIDE = { "多": ["做多", "只做多，不放空。"], "空": ["做空", "只放空，不做多。"], "雙向": ["雙向", "多單、空單都會做，通常是平常做多、危險的日子改放空。"] };
 // 等級整把尺的說明（排行榜篩選列用）
 const tagScale = g => `${TAG_GRADE[g][0]}：${Object.entries(TAG_GRADE[g][1]).map(([k, s]) => `${k}＝${s}`).join("、")}。${TAG_GRADE[g][2]}`;
 // 跟著排行榜選的條件變的標籤：字 → [字, 樣式, 說明]；不認得的字回傳 null
@@ -541,11 +531,12 @@ const tagCond = t => t === "對照" ? [t, "do", "買進持有：拿來跟每一�
 const tagHeld = d => ["持有中", "now", `${d} 日盤收盤時手上有部位。`];
 // 明天進出場：v["明天"]＝{動作, 方向, 時間, 理由}；空手不標。說明＝時間＋理由
 const tagNext = m => !m || m["動作"] === "空手" ? [] : [[m["動作"] === "還不知道" ? "還不知道" : "明天" + m["動作"], m["動作"] === "還不知道" ? "warn" : m["動作"] === "續抱" ? "do" : "next", `${m["時間"]}：${m["理由"]}`]];
-// 一支策略的全部標籤，照固定順序：現在（持有中、明天）、長期、單日、看什麼資料、怎麼做、筆數少、跟著條件變的。每個是 [字, 樣式, 說明]
-// v＝{持有, 明天, 等級, 單日, 看, 做, 筆數少}；cond＝跟著條件變的那幾個字
+// 一支策略的全部標籤，照固定順序：方向、現在（持有中、明天）、長期、單日、看什麼資料、怎麼做、筆數少、跟著條件變的。每個是 [字, 樣式, 說明]
+// v＝{方向, 持有, 明天, 等級, 單日, 看, 做, 筆數少}；cond＝跟著條件變的那幾個字
 function tagList(v, cond = []) {
   const gr = g => { const x = TAG_GR[v[g === "長期" ? "等級" : "單日"]]; return x ? [[`${g} ${x}`, "do", `${TAG_GRADE[g][0]}：${TAG_GRADE[g][1][x]}。${TAG_GRADE[g][2]}`]] : []; };
-  return [...(v["持有"] ? [tagHeld(v["持有"])] : []), ...tagNext(v["明天"]), ...gr("長期"), ...gr("單日"), ...(v["看"] || []).map(t => [t, "", TAG_LOOK[t]]), ...(v["做"] || []).map(t => [t, "do", TAG_DO[t]]),
+  const sd = TAG_SIDE[v["方向"]];
+  return [...(sd ? [[sd[0], "do", sd[1]]] : []), ...(v["持有"] ? [tagHeld(v["持有"])] : []), ...tagNext(v["明天"]), ...gr("長期"), ...gr("單日"), ...(v["看"] || []).map(t => [t, "", TAG_LOOK[t]]), ...(v["做"] || []).map(t => [t, "do", TAG_DO[t]]),
     ...(v["筆數少"] ? [["筆數少", "warn", "全部期間不到 20 筆，數字不太能信。"]] : []), ...cond.map(tagCond).filter(Boolean)];
 }
 const tagHtml = list => list.map(([t, k, tip]) => `<span class="tg ${k}" title="${tip}">${t}</span>`).join("");
@@ -561,7 +552,8 @@ document.head.insertAdjacentHTML("beforeend", `<style>
 </style>`);
 
 const LOOK = Object.keys(TAG_LOOK), DO = [...Object.keys(TAG_DO), "筆數少"];   // 篩選列的順序
-const tagV = c => { const v = INFO[c]; return v ? { ...v, "筆數少": v["筆"] < 20 } : {}; };
+const SIDES = Object.values(TAG_SIDE).map(x => x[0]);   // 做多、做空、雙向排在同一個榜，用方向標籤分
+const tagV = r => { const v = INFO[r["編號"]]; return v ? { ...v, "方向": r["方向"], "筆數少": v["筆"] < 20 } : {}; };
 const HELD_DAY = Object.values(INFO).map(v => v["持有"] || "").sort().pop() || DATA["資料到"];   // 持有中是哪一天收盤的狀態
 // 滑鼠移到某一列的倍數上：用最新收盤的指數算大台、小台、微台 1 口帳戶各要放多少錢
 const needTip = k => [["大台", 200], ["小台", 50], ["微台", 10]].map(([n, m]) => `${n}＝（指數 ${fmt(DATA["現價"])} × 每點 ${m} 元）÷ ${k.toFixed(2)} ≈ 帳戶放 ${fmt(Math.round(DATA["現價"] * m / k / 1e4))} 萬做 1 口`).join("&#10;") + `&#10;指數是 ${DATA["資料到"]} 日盤收盤`;
@@ -569,7 +561,7 @@ const needTip = k => [["大台", 200], ["小台", 50], ["微台", 10]].map(([n, 
 const condTags = r => { const sv = sims(r), rep = r["代表"] && r["代表"].split("_")[0]; return [
   ...(r["編號"] === BH ? ["對照"] : []), ...(r["碰上限"] ? ["到上限"] : []), ...(r["壓低"] ? ["壓低倍數"] : []),
   ...(rep ? [`同類・${rep} 代表`] : []), ...(sv.length ? [`同類 ${sv.length} 支`] : [])]; };
-const tagsOf = c => tagList(tagV(c)).map(x => x[0]);
+const tagsOf = r => tagList(tagV(r)).map(x => x[0]);
 const days = h => h < 1 ? "不到 1 天" : (h >= 10 ? Math.round(h) : h.toFixed(1).replace(/\.0$/, "")) + " 天";
 const freq = y => y >= 1 ? `一年約 ${y >= 10 ? Math.round(y) : y.toFixed(1).replace(/\.0$/, "")} 次` : y > 0 ? `約 ${Math.round(1 / y)} 年 1 次` : "";
 const when = a => a.map(x => TM[x]).join("或");
@@ -633,8 +625,8 @@ $("theme").onclick = () => {
 // 跟 Windows 檔案總管一樣的排法：不分大小寫，字串裡的數字照數值大小比（S9 排在 S10 前面）
 const NATURAL = new Intl.Collator("zh-Hant", { numeric: true, sensitivity: "base" });
 const COLS = [["名次", "名次", "c"], ["策略", "標籤", "l"], ["年化報酬率（複利）", "年化", "", "照這個倍數，本金平均一年成長幾 %。賺的錢會滾進去一起算（複利），也叫年複合成長率"], ["放幾倍", "倍數", "hide-s", `放幾倍＝1 口的合約價值 ÷ 你帳戶裡放的錢（不是保證金的幾倍）。帳戶要放的錢＝（指數 × 每點多少錢）÷ 放幾倍；大台每點 200 元、小台 50 元、微台 10 元。滑鼠移到每一列的倍數上，會用 ${DATA["資料到"]} 日盤收盤 ${fmt(DATA["現價"])} 點算給你看。倍數越大，帳戶放的錢越少、越容易被追繳`], ["最大回落", "最大回落", "hide-s", "從最高點最多跌掉幾 %"], ["夏普", "夏普", "hide-s hide-t", "報酬穩不穩：平均報酬 ÷ 上下波動，越高越穩。1 以上算不錯"], ["勝率", "勝率", "hide-s", "每筆交易裡，賺錢的筆數占多少"], ["賺賠比", "賺賠比", "hide-s hide-m", "賺錢那幾筆平均賺的 ÷ 賠錢那幾筆平均賠的，大於 1 代表賺的比賠的大"], ["賺錢月份", "賺錢月份", "hide-s hide-m", "有進場的月份裡，賺錢的月份占多少"], ["最慘一年", "最慘一年", "hide-s hide-m", "照這個倍數，報酬最差的那一年"], ["有部位", "有部位", "hide-s hide-m", "全部交易日裡，手上有部位的日子占多少"], ["每筆賺", "每筆賺", "hide-s hide-m", "這段期間每一筆交易平均賺幾 %（賺賠 ÷ 進場價，不放大）。會加碼的只算加碼那幾口"], ["每天賺", "每天賺", "hide-s hide-m", "手上有部位的日子，平均一天賺幾 %（不放大）。跟買進持有那一列比，短線、很少出手的策略也比得公平"]];
-function sideRows(side) {
-  const rs = scen()["列"].filter(r => r["方向"] === side).sort((a, b) => b["年化"] - a["年化"]);
+function allRows() {
+  const rs = scen()["列"].filter(r => r["方向"] !== "對照").sort((a, b) => b["年化"] - a["年化"]);
   rs.forEach((r, i) => { r["名次"] = i + 1; r["標籤"] = label(r); });
   return rs;
 }
@@ -643,40 +635,35 @@ function render() {
   const sc = scen(), ref = sc["列"].find(r => r["方向"] === "對照");
   document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "v-" + st.view));
   $("cond").hidden = st.view === "news";
-  $("side").hidden = st.view !== "rank";
   $("tabs").querySelectorAll("a").forEach(a => a.classList.toggle("on", a.dataset.v === st.view));
   $("startRange").value = si(); startShow(si());
   $("capRange").value = CAPS.findIndex(x => x[0] === st.cap); capShow($("capRange").value);
-  const low = sc["列"].filter(r => r["方向"] === st.side && r["壓低"]).length;
-  $("capNote").textContent = CAP_NOTE(st.cap) + " " + FLOOR_NOTE + (low ? `這個條件下${SIDE_NAME[st.side]}有 ${low} 支被壓低倍數。` : `這個條件下${SIDE_NAME[st.side]}沒有要壓低的。`); $("capNote").classList.toggle("hot", st.cap === "不限");
+  const low = sc["列"].filter(r => r["方向"] !== "對照" && r["壓低"]).length;
+  $("capNote").textContent = CAP_NOTE(st.cap) + " " + FLOOR_NOTE + (low ? `這個條件下有 ${low} 支被壓低倍數。` : "這個條件下沒有要壓低的。"); $("capNote").classList.toggle("hot", st.cap === "不限");
   save();
   $("title").textContent = "期貨排行榜";
   $("subtitle").textContent = "策略參考地圖：只列全部期間有賺錢的策略，很像的只留一支，照年化排名。";
-  $("side").innerHTML = ["多", "空", "雙向"].map(s => `<button data-v="${s}" class="${st.side === s ? "on" : ""}">${SIDE_NAME[s]}<small>${sc["列"].filter(r => r["方向"] === s).length} 支</small></button>`).join("");
-  $("side").querySelectorAll("button").forEach(b => b.onclick = () => { st.side = b.dataset.v; st.q = $("q").value = ""; render(); });
 
-  const all = sideRows(st.side), tested = sc["測過"][st.side], top = all[0];
+  const all = allRows(), T = sc["測過"], tested = T["多"] + T["空"] + T["雙向"], top = all[0];
   const kpi = (k, v, d) => `<div class="card kpi"><div class="k">${k}</div><div class="v num">${v}</div><div class="d" title="${esc(d)}">${esc(d)}</div></div>`;
   $("kpis").innerHTML =
-    kpi("留下的策略", `${all.length}<small>／ ${tested} 支</small>`, `這段期間測得到的${SIDE_NAME[st.side]}策略共 ${tested} 支，去掉賠錢的、很像的只留一支`) +
+    kpi("留下的策略", `${all.length}<small>／ ${tested} 支</small>`, `這段期間測得到的策略共 ${tested} 支（做多 ${T["多"]}、做空 ${T["空"]}、雙向 ${T["雙向"]}），去掉賠錢的、很像的只留一支`) +
     kpi("第一名年化報酬率", top ? pct(top["年化"]) : "—", top ? `${top["標籤"]}，放 ${top["倍數"].toFixed(2)} 倍` : "這個條件下沒有賺錢的") +
     kpi("年化報酬率（中位數）", all.length ? pct(median(all.map(r => r["年化"]))) : "—", "排在正中間那支的年化報酬率") +
-    (st.side !== "空"
-      ? kpi("買進持有（對照）", pct(ref["年化"]), `同條件放 ${ref["倍數"].toFixed(2)} 倍，贏過它的有 ${all.filter(r => r["年化"] > ref["年化"]).length} 支`)
-      : kpi("有部位時間中位數", all.length ? pct(median(all.map(r => r["有部位"])), 0) : "—", "做空大多只在少數日子進場")) +
+    kpi("買進持有（對照）", pct(ref["年化"]), `同條件放 ${ref["倍數"].toFixed(2)} 倍，贏過它的有 ${all.filter(r => r["年化"] > ref["年化"]).length} 支`) +
     (() => { const n = s => sc["列"].filter(r => r["方向"] === s && (INFO[r["編號"]] || {})["持有"]).length, m = n("多"), k = n("空"), b = n("雙向");
       const nx = a => sc["列"].filter(r => ((INFO[r["編號"]] || {})["明天"] || {})["動作"] === a).length;
       return kpi(`持有中（${HELD_DAY.slice(5).replace("-", "/")} 收盤）`, `多 ${m}<small>／ 空 ${k}</small>`, `明天進場 ${nx("進場")}、出場 ${nx("出場")} 支（只有試做的 10 支有）；多空都做 ${b} 支持有中`); })();
-  $("listTitle").innerHTML = `${SIDE_NAME[st.side]}榜單<span>${STARTS.find(x => x[0] === st.start)[1]}・${CAPS.find(x => x[0] === st.cap)[1]}</span>`;
+  $("listTitle").innerHTML = `榜單<span>${STARTS.find(x => x[0] === st.start)[1]}・${CAPS.find(x => x[0] === st.cap)[1]}</span>`;
   renderTable();
 }
 function renderTable() {
   if (!scen()) return;
   const sc = scen(), ref = sc["列"].find(r => r["方向"] === "對照");
-  let rs = sideRows(st.side);
+  let rs = allRows();
   // 標籤篩選：選好幾個就是全部都要有；每個標籤後面的數字＝再加選它會剩幾支
-  const has = (r, ts) => { const t = tagsOf(r["編號"]); return [...ts].every(x => t.includes(x)); };
-  const noHit = r => { const t = tagsOf(r["編號"]); return [...st.no].some(x => t.includes(x)); };
+  const has = (r, ts) => { const t = tagsOf(r); return [...ts].every(x => t.includes(x)); };
+  const noHit = r => { const t = tagsOf(r); return [...st.no].some(x => t.includes(x)); };
   const tagBtn = t => {
     const on = st.tags.has(t), n = rs.filter(r => !noHit(r) && has(r, new Set([...st.tags, t]))).length;
     if (st.no.has(t)) return `<button data-t="${t}" class="no" title="不看有這個標籤的策略，再點一下取消">${t}</button>`;
@@ -684,7 +671,7 @@ function renderTable() {
     return `<button data-t="${t}" class="${on ? "on" : ""}" ${why ? `disabled title="${why}"` : ""}>${t}<small>${n}</small></button>`;
   };
   $("tagbar").innerHTML = (st.tags.size + st.no.size ? `<div class="grp"><button class="clr" data-t="">✕ 清除標籤（只看 ${st.tags.size} 個、不看 ${st.no.size} 個）</button></div>` : "") +
-    `<div class="grp"><span title="${HELD_DAY} 日盤收盤時的狀態">現在</span>${["持有中", "明天進場", "明天出場"].map(tagBtn).join("")}</div><div class="grp"><span>看什麼</span>${LOOK.map(tagBtn).join("")}</div><div class="grp"><span>怎麼做</span>${DO.map(tagBtn).join("")}</div>${["長期", "單日"].map(g => `<div class="grp"><span title="${tagScale(g)}">${g}</span>${[..."ABCDE"].map(x => tagBtn(g + " " + x)).join("")}</div>`).join("")}`;
+    `<div class="grp"><span>方向</span>${SIDES.map(tagBtn).join("")}</div><div class="grp"><span title="${HELD_DAY} 日盤收盤時的狀態">現在</span>${["持有中", "明天進場", "明天出場"].map(tagBtn).join("")}</div><div class="grp"><span>看什麼</span>${LOOK.map(tagBtn).join("")}</div><div class="grp"><span>怎麼做</span>${DO.map(tagBtn).join("")}</div>${["長期", "單日"].map(g => `<div class="grp"><span title="${tagScale(g)}">${g}</span>${[..."ABCDE"].map(x => tagBtn(g + " " + x)).join("")}</div>`).join("")}`;
   $("tagbar").querySelectorAll("button").forEach(b => b.onclick = () => {
     const t = b.dataset.t;
     if (!t) { st.tags.clear(); st.no.clear(); }
@@ -694,21 +681,20 @@ function renderTable() {
     renderTable();
   });
   if (st.tags.size + st.no.size) rs = rs.filter(r => !noHit(r) && has(r, st.tags));
-  else if (st.side !== "空") { ref["名次"] = "—"; ref["標籤"] = label(ref); rs = rs.concat(ref).sort((a, b) => b["年化"] - a["年化"]); }
+  else { ref["名次"] = "—"; ref["標籤"] = label(ref); rs = rs.concat(ref).sort((a, b) => b["年化"] - a["年化"]); }
   const total = rs.length;
   if (st.q) {
     // 搜尋時，同類被代表的那幾支也單獨列出來（平常每類只列一支）
-    const extra = (sc["同類列"] || []).filter(r => r["方向"] === st.side && !noHit(r) && has(r, st.tags));
+    const extra = (sc["同類列"] || []).filter(r => !noHit(r) && has(r, st.tags));
     extra.forEach(r => { r["名次"] = "—"; r["標籤"] = label(r); r["代表"] = (sc["列"].find(x => DATA["類"][x["編號"]] === DATA["類"][r["編號"]]) || {})["編號"]; });
-    rs = rs.concat(extra).filter(r => `${r["標籤"]} ${r["編號"]} ${r["抱法"] || ""} ${tagsOf(r["編號"]).join(" ")}`.toLowerCase().replace(/[・\s]/g, "").includes(st.q))
+    rs = rs.concat(extra).filter(r => `${r["標籤"]} ${r["編號"]} ${r["抱法"] || ""} ${tagsOf(r).join(" ")}`.toLowerCase().replace(/[・\s]/g, "").includes(st.q))
       .sort((a, b) => b["年化"] - a["年化"]);
   }
-  $("listTitle").innerHTML = `${SIDE_NAME[st.side]}榜單<span>${STARTS.find(x => x[0] === st.start)[1]}・${CAPS.find(x => x[0] === st.cap)[1]}${st.q ? `・符合 ${rs.length} 支` : "・只列前 10 名"}</span>`;
+  $("listTitle").innerHTML = `榜單<span>${STARTS.find(x => x[0] === st.start)[1]}・${CAPS.find(x => x[0] === st.cap)[1]}${st.q ? `・符合 ${rs.length} 支` : "・只列前 10 名"}</span>`;
   if (st.sort !== "年化") rs.sort((a, b) => (typeof a[st.sort] === "string" || typeof b[st.sort] === "string" ? NATURAL.compare(String(a[st.sort]), String(b[st.sort])) : a[st.sort] - b[st.sort]) * st.dir);
   else if (st.dir === 1) rs.reverse();
   if (!st.q) { let k = 0; rs = rs.filter(r => r["編號"] === BH || k++ < 10); }   // 只列前 10 名，買進持有留著對照
   const tbl = $("tbl");
-  tbl.className = st.side === "空" ? "short" : "";
   tbl.querySelector("thead").innerHTML = "<tr>" + COLS.map(([t, k, c, tip]) => `<th class="${c || ""} ${st.sort === k ? "on" : ""}" data-k="${k || ""}" title="${tip || ""}">${t}${st.sort === k ? (st.dir < 0 ? " ▼" : " ▲") : ""}</th>`).join("") + "</tr>";
   tbl.querySelectorAll("th").forEach(th => th.onclick = () => {
     const k = th.dataset.k; if (!k) return;
@@ -717,7 +703,7 @@ function renderTable() {
   });
   tbl.querySelector("tbody").innerHTML = rs.map(r => {
     const c = r["編號"], isRef = c === BH, n = r["名次"], open = st.open.has(c), v = INFO[c];
-    const chips = tagHtml(tagList(tagV(c), condTags(r)));
+    const chips = tagHtml(tagList(tagV(r), condTags(r)));
     return `<tr class="row ${isRef ? "ref" : ""} ${open ? "open" : ""}" data-c="${esc(c)}">
       <td class="c"><span class="rk ${n <= 3 ? "t" + n : ""} num">${n}</span></td>
       <td class="l name"><span class="chev">▶</span>${isRef ? "" : `<span class="code">${esc(c.split("_")[0])}</span>`}${esc(r["名稱"])}
@@ -739,7 +725,7 @@ function renderTable() {
     const c = tr.dataset.c; st.open.has(c) ? st.open.delete(c) : st.open.add(c); renderTable();
   });
   $("empty").hidden = rs.length > 0;
-  $("empty").textContent = total ? (rs.length ? "" : notFound()) : st.tags.size + st.no.size ? "沒有符合這些標籤的策略，少選幾個試試。" : `這個條件下沒有賺錢的${SIDE_NAME[st.side]}策略。${st.side === "空" ? "做空大多從 2017 年 5 月才有資料，起算年份拉到 2017 以後試試。" : ""}`;
+  $("empty").textContent = total ? (rs.length ? "" : notFound()) : st.tags.size + st.no.size ? "沒有符合這些標籤的策略，少選幾個試試。" : "這個條件下沒有賺錢的策略。";
 }
 // 搜尋找不到時：這支是不是在別的起算年份、或被同類的哪一支代表
 function notFound() {
@@ -751,8 +737,7 @@ function notFound() {
   const where = STARTS.map(([s], i) => at.includes(`${s}|${st.cap}`) ? i : -1).filter(i => i >= 0)
     .reduce((a, i) => (a.length && a[a.length - 1][1] === i - 1 ? a[a.length - 1][1] = i : a.push([i, i]), a), [])
     .map(([a, b]) => a === b ? yr(a) : `${yr(a)}～${yr(b)}`);
-  const side = SIDE_NAME[(DATA["類"][c] || "").replace(/\d+$/, "")] || "";
-  return `${c} ${DATA["名稱"][c][0]}：這個條件下不在${SIDE_NAME[st.side]}榜上。${side && side !== SIDE_NAME[st.side] ? `它在${side}榜。` : ""}${where.length ? `起算年份拉到 ${where.join("、")} 才看得到。` : "這個放大規則下每個起算年份都沒賺錢。"}`;
+  return `${c} ${DATA["名稱"][c][0]}：這個條件下不在榜上。${where.length ? `起算年份拉到 ${where.join("、")} 才看得到。` : "這個放大規則下每個起算年份都沒賺錢。"}`;
 }
 // 同類裡這個條件下沒上榜的：分清楚是資料還沒開始，還是有資料但沒賺（榜上只列有賺的；起算日後 7 天內要有資料才算，跟 算資料.py 一樣）
 const plus7 = d => new Date(Date.parse(d) + 7 * 864e5).toISOString().slice(0, 10);
