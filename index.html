@@ -282,7 +282,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
 <!-- 排行榜「近期新聞」分頁的內容（手寫，不會自動更新）。改完跑 算試看.py 再推上線。
      一天一張卡片（class="card pad day"），每張是 時間｜事件｜結果 三欄；比較會動到大盤的那一列加 class="key"。
      結果欄：已經發生的寫數字和判斷，偏多 <span class="bias up">、偏空 <span class="bias down">、持平 <span class="bias flat">；還沒發生寫 <span class="no">還沒發生</span>。 -->
-<div class="head"><div><h1>近期大事</h1><p>整理日期 2026-11-25，結果更新到 11/25 23:00。時間都是台灣時間，日期大多是新聞和經濟行事曆上寫的，以官方公告為準。底色標起來的是比較會動到大盤的事；結果欄紅色是偏多、綠色是偏空（台股習慣）。三大法人那格看三個加起來的淨額：淨空減少 1,000 口以上算偏多、增加 1,000 口以上算偏空，其他算持平（投信多單大多是正 2 這類 ETF 的部位、外資空單多半是幫現貨避險，單看一邊會誤判；這個門檻是簡單訂的，沒有回測過）。事件下面的「影響」是可能怎麼動到多空：有標「我們回測」的是用台指期歷史資料算的，其他是一般市場說法、沒有驗證過。</p></div></div>
+<div class="head"><div><h1>近期大事</h1><p>整理日期 2026-11-26，結果更新到 11/26 05:00。時間都是台灣時間，日期大多是新聞和經濟行事曆上寫的，以官方公告為準。底色標起來的是比較會動到大盤的事；結果欄紅色是偏多、綠色是偏空（台股習慣）。三大法人那格看三個加起來的淨額：淨空減少 1,000 口以上算偏多、增加 1,000 口以上算偏空，其他算持平（投信多單大多是正 2 這類 ETF 的部位、外資空單多半是幫現貨避險，單看一邊會誤判；這個門檻是簡單訂的，沒有回測過）。事件下面的「影響」是可能怎麼動到多空：有標「我們回測」的是用台指期歷史資料算的，其他是一般市場說法、沒有驗證過。</p></div></div>
 
 <div class="card pad anytime">
   <h2>⚡ 隨時可能出來的（沒有固定日期）</h2>
@@ -315,7 +315,9 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
   <div class="scroll"><table>
     <thead><tr><th>時間</th><th>事件</th><th>結果</th></tr></thead>
     <tbody>
-      <tr><td class="t">凌晨 3:00</td><td>聯準會褐皮書</td><td class="r"><span class="no">還沒發生</span></td></tr>
+      <tr><td class="t">凌晨 3:00</td><td>聯準會褐皮書</td><td class="r"><span class="bias flat">持平</span>12 個地區有 8 個小幅到溫和成長，另外 4 個持平（10 月是 9 個成長）。就業小增，物價溫和上漲，成本漲得比售價快（能源、運輸、關稅）。多數地區預期之後小幅到溫和成長。</td></tr>
+      <tr class="key"><td class="t">05:00</td><td class="e">美股收盤（11/25 週三，感恩節前最後一個完整交易日）</td><td class="r"><span class="bias flat">持平</span>道瓊 +0.33%（50,183），S&amp;P 500 −0.25%（7,183），那斯達克 −0.62%（23,586），費半 −0.7%。早盤因為 PCE 偏熱、301 新關稅、AI 股續賣，道瓊一度跌超過 1,100 點、那斯達克跌超過 4%；尾盤資金轉進能源、原物料等類股拉回，科技股收盤還是跌的。輝達 −3.9%（盤中跌超過 9%）、美光 −4.6%，台積電 ADR −1.96%（342.34 美元）。市場估 12 月升息機率約 97%。</td></tr>
+      <tr><td class="t">05:00</td><td>台指期夜盤收盤</td><td class="r"><span class="bias up">偏多</span>收 38,397，比日盤結算價 38,123 漲 274 點（+0.7%）。</td></tr>
       <tr><td class="t">全天</td><td>美國感恩節，美股休市（台股、台指期照常）<div class="hint">看板：那晚沒有費半收盤，L194、L204、S49、疊11_W2 這些看美股的策略，11/27 早上會一直顯示「還不知道」。</div></td><td class="r"><span class="no">還沒發生</span></td></tr>
     </tbody>
   </table></div>
@@ -458,6 +460,10 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--faint);fon
       <li><a href="https://www.cnbc.com/2026/11/25/us-tariffs-trump-section-301.html" target="_blank" rel="noopener">CNBC：美國公布 301 新關稅（中國、歐盟等 14 個經濟體）</a></li>
       <li><a href="https://www.cna.com.tw/news/aopl/202611250324.aspx" target="_blank" rel="noopener">中央社：301 擬對 14 經濟體加關稅，台灣協議稅率至少 15%</a></li>
       <li><a href="https://udn.com/news/story/6811/9902115" target="_blank" rel="noopener">聯合報：301 調查結果，擬對台課 15%、對中加徵 20%</a></li>
+      <li><a href="https://www.federalreserve.gov/monetarypolicy/beigebook202611-summary.htm" target="_blank" rel="noopener">聯準會：11 月褐皮書摘要</a></li>
+      <li><a href="https://www.fool.com/coverage/stock-market-today/2026/11/25/stock-market-today-nov-25-dow-erases-1-100-point-loss-as-wall-street-stages-dramatic-late-day-comeback/" target="_blank" rel="noopener">Motley Fool：11/25 美股收盤，道瓊收復 1,100 點跌幅</a></li>
+      <li><a href="https://www.foxbusiness.com/markets/stocks-11-25-2026" target="_blank" rel="noopener">Fox Business：11/25 美股盤勢（輝達、美光、升息機率）</a></li>
+      <li><a href="https://udn.com/news/story/6811/9902571" target="_blank" rel="noopener">經濟日報：台積電 ADR 跌近 2%、台指期夜盤漲 274 點</a></li>
       <li><a href="https://ustr.gov/about/policy-offices/press-office/press-releases/2026/march/ustr-initiates-section-301-investigations-relating-structural-excess-capacity-and-production" target="_blank" rel="noopener">美國貿易代表署：16 個經濟體產能過剩 301 調查</a></li>
       <li><a href="https://www.ctee.com.tw/news/20261124702053-430701" target="_blank" rel="noopener">工商時報：川普說兩年後晶片關稅上看 200%</a></li>
       <li><a href="https://uanalyze.com.tw/articles/7597359171" target="_blank" rel="noopener">優分析：MSCI 調升台股權重，11/30 盤後生效</a></li>
